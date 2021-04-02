@@ -11,7 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="openssl-net" Version="0.7.3" />
+    <Reference Include="ManagedOpenSsl">
+      <HintPath>resource\ManagedOpenSsl.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
