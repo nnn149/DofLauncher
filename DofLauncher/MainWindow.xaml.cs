@@ -1,54 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Windows;
+using System.IO;
+using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 
 namespace DofLauncher
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-        private static string Decrypt(byte[] payLoad, string privateKey)
-        {
-            using (var key = OpenSSL.Crypto.CryptoKey.FromPrivateKey(Convert.FromBase64String(privateKey)))
-            {
-                using (var rsa = key.GetRSA())
-                {
-                    return Convert.ToBase64String(rsa.PrivateDecrypt(payLoad, OpenSSL.Crypto.RSA.Padding.None));
-                }
-            }
-        }
-        private static byte[] strToToHexByte(string hexString)
-        {
-            hexString = hexString.Replace(" ", "");
-            if ((hexString.Length % 2) != 0)
-                hexString += " ";
-            byte[] returnBytes = new byte[hexString.Length / 2];
-            for (int i = 0; i < returnBytes.Length; i++)
-                returnBytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
-            return returnBytes;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            string privateKey = @"MIIEpAIBAAKCAQEAnA5hdnlSGwUNA24oQH+l3wLwha6M9HL4HVKYE3d29Xj9AkRJ
+        string privateKey = @"MIIEpAIBAAKCAQEAnA5hdnlSGwUNA24oQH+l3wLwha6M9HL4HVKYE3d29Xj9AkRJ
 A/GFGJS4rxn2DlE5rWRFfB0aFyUNHakMtzWSWj8szEWxlEp9cceAOhUK+tGaz3BW
 bWCIOPENR6XBG8Oo9qd9z7KOOyDGJtxsRWSFuOeCEeTHMsYcUDgqTsycNx5E5qyK
 Ztg1TFM1UFNwB7ACtYuBDPUyQAt+3feHlF34Nc+cEMPNEGrFWqBTZHwyYOPdO2OS
@@ -73,15 +38,76 @@ JScJ+VjsHcK6Sv4H5zkmnSBajPi5mUkQ6HWLpGi40njJIo7Xi98RAmJgZU7uNDG6
 z9NKHwKBgQCnTNYJ4aoVjpI59xf6/xBY/ga7FCh8MlnXwU1T93NG89+cMW+zMMR6
 ceOgPsangrwzD5YF8oeeNZqVrx+QBYy+ILNz4zqjJRv78xQaVeL47GZHo1t7iiA0
 rm1dLzMzyruMe+wX5tGzHzMGlRBAaIc3B0wxx/BZpqRnFnAKXBeIXw==";
-            string tou = "0001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
-            string wei = "010101010101010101010101010101010101010101010101010101010101010155914510010403030101";
-            int zh = Convert.ToInt16(txtUid.Text);
-            string zh_hex = Convert.ToString(zh, 16).ToUpper().PadLeft(10, '0');
-            Console.WriteLine(tou + zh_hex + wei);
-            byte[] buffer = strToToHexByte(tou + zh_hex + wei);
-            string p = Decrypt(buffer, privateKey);
-            Console.WriteLine(p);
-            Process.Start("dnf.exe", p);
+        MainWindowModel mainWindowModel;
+        private string configPath = "config.json";
+        public MainWindow()
+        {
+
+            InitializeComponent();
+            if (File.Exists(configPath))
+            {
+                try
+                {
+                    mainWindowModel = JsonConvert.DeserializeObject<MainWindowModel>(File.ReadAllText(configPath));
+
+                }
+                catch
+                {
+                    File.Delete(configPath);
+                    mainWindowModel = new MainWindowModel(1, "", "", "127.0.0.1", "3306", "game", "uu5!^%jg");
+                }
+            }
+            else
+            {
+                mainWindowModel = new MainWindowModel(1, "", "", "127.0.0.1", "3306", "game", "uu5!^%jg");
+            }
+            this.DataContext = mainWindowModel;
         }
+
+        private void BtnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var UID = new DofMysql(mainWindowModel).GetUID(mainWindowModel.Username, mainWindowModel.UserPwd);
+                Process.Start("dnf.exe", DofUtil.GenerateLoginParam(UID, privateKey));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "错误");
+            }
+        }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            File.WriteAllText(configPath, JsonConvert.SerializeObject(mainWindowModel));
+        }
+
+        private void BtnReg_Click(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                if (mainWindowModel.Username.Length < 5 || mainWindowModel.Username.Length > 16 || mainWindowModel.UserPwd.Length < 5 || mainWindowModel.UserPwd.Length > 16)
+                {
+                    MessageBox.Show("用户名和密码长度在5-16", "错误");
+                    return;
+                }
+
+                var result = new DofMysql(mainWindowModel).Reg(mainWindowModel.Username, mainWindowModel.UserPwd);
+                MessageBox.Show(result, "成功");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "错误");
+            }
+
+
+        }
+
+        private void BtnUIDLogin_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("dnf.exe", DofUtil.GenerateLoginParam(mainWindowModel.Uid, privateKey));
+        }
+
     }
 }

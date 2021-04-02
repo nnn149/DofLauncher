@@ -5,10 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DofLauncher"
         mc:Ignorable="d"
-        Title="DofLauncher" Height="124" Width="174">
+        Title="MainWindow" Height="247" Width="400" Closed="Window_Closed">
     <Grid>
-        <TextBox Name="txtUid" HorizontalAlignment="Center" Margin="0,10,0,0" Text="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" Height="19"/>
-        <Button Content="启动" HorizontalAlignment="Center" Margin="0,44,0,0" VerticalAlignment="Top" Height="31" Width="89" Click="Button_Click"/>
-
+        <StackPanel>
+            <TextBox Text="{Binding Uid}"></TextBox>
+            <TextBox Text="{Binding Username}"></TextBox>
+            <TextBox Text="{Binding UserPwd}"></TextBox>
+            <TextBox Text="{Binding MysqlIP}"></TextBox>
+            <TextBox Text="{Binding MysqlPort}"></TextBox>
+            <TextBox Text="{Binding MysqlAcc}"></TextBox>
+            <TextBox Text="{Binding MysqlPwd}"></TextBox>
+            <Button Name="BtnLogin" Click="BtnLogin_Click">用户名密码登录</Button>
+            <Button Name="BtnUIDLogin" Click="BtnUIDLogin_Click">UID登录</Button>
+            <Button Name="BtnReg" Click="BtnReg_Click">注册</Button>
+        </StackPanel>
     </Grid>
 </Window>
