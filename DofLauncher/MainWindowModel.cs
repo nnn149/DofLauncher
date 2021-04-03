@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DofLauncher
 {
-   public class MainWindowModel
+    public class MainWindowModel : INotifyPropertyChanged
     {
 
         public int Uid { get; set; }
@@ -30,6 +31,10 @@ namespace DofLauncher
             MysqlPort = mysqlPort;
             MysqlAcc = mysqlAcc;
             MysqlPwd = mysqlPwd;
+
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        
     }
 }

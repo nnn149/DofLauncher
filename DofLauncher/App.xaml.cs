@@ -9,7 +9,7 @@ using System.Windows;
 namespace DofLauncher
 {
     /// <summary>
-    /// App.xaml 的交互逻辑
+    /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {

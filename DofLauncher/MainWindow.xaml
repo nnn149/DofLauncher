@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DofLauncher"
         mc:Ignorable="d"
-        Title="滑里稽登陆器" Height="247" Width="400" Closed="Window_Closed">
+        Title="MainWindow" Height="300" Width="400">
     <Grid>
         <StackPanel>
             <TextBox Text="{Binding Uid}"></TextBox>

@@ -1,19 +1,15 @@
-﻿using System.Windows;
-using System.IO;
-using Newtonsoft.Json;
-using System.Diagnostics;
+﻿using Newtonsoft.Json;
 using System;
-using System.Windows.Controls;
-using System.Text.RegularExpressions;
-using System.Reflection;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
+using System.Windows;
+
 
 namespace DofLauncher
 {
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
     public partial class MainWindow : Window
     {
         string privateKey = @"MIIEpAIBAAKCAQEAnA5hdnlSGwUNA24oQH+l3wLwha6M9HL4HVKYE3d29Xj9AkRJ
@@ -151,4 +147,5 @@ rm1dLzMzyruMe+wX5tGzHzMGlRBAaIc3B0wxx/BZpqRnFnAKXBeIXw==";
 
 
     }
+
 }
