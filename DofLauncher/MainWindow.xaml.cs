@@ -5,6 +5,9 @@ using System.Diagnostics;
 using System;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
+using System.Reflection;
+using System.Net;
+using System.Text;
 
 namespace DofLauncher
 {
@@ -73,7 +76,7 @@ rm1dLzMzyruMe+wX5tGzHzMGlRBAaIc3B0wxx/BZpqRnFnAKXBeIXw==";
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "错误");
+                MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -89,16 +92,16 @@ rm1dLzMzyruMe+wX5tGzHzMGlRBAaIc3B0wxx/BZpqRnFnAKXBeIXw==";
             {
                 if (mainWindowModel.Username.Length < 5 || mainWindowModel.Username.Length > 16 || mainWindowModel.UserPwd.Length < 5 || mainWindowModel.UserPwd.Length > 16)
                 {
-                    MessageBox.Show("用户名和密码长度在5-16", "错误");
+                    MessageBox.Show("用户名和密码长度在5-16", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 var result = new DofMysql(mainWindowModel).Reg(mainWindowModel.Username, mainWindowModel.UserPwd);
-                MessageBox.Show(result, "成功");
+                MessageBox.Show(result, "成功", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "错误");
+                MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
 
@@ -108,6 +111,44 @@ rm1dLzMzyruMe+wX5tGzHzMGlRBAaIc3B0wxx/BZpqRnFnAKXBeIXw==";
         {
             Process.Start("dnf.exe", DofUtil.GenerateLoginParam(mainWindowModel.Uid, privateKey));
         }
+
+        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string currentVersion = "v" + Assembly.GetEntryAssembly().GetName().Version.ToString();
+                string url = "https://api.github.com/repos/nnn149/DofLauncher/releases/latest";
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+                req.Method = "GET";
+                req.ContentType = "application/json; charset=utf-8";
+                req.Accept = "application/vnd.github.v3+json";
+                req.UserAgent = "Nannan";
+                HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+                Stream stream = resp.GetResponseStream();
+                string result = "a";
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
+                var release = JsonConvert.DeserializeAnonymousType(result, new { tag_name = "", html_url = "", published_at = "" });
+                if (release.tag_name == currentVersion)
+                {
+                    MessageBox.Show("当前是最新版本:" + currentVersion, "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    if (MessageBox.Show("当前版本:" + currentVersion + "\n最新版本:" + release.tag_name + "\n发布日期:" + DateTime.Parse(release.published_at) + "\n是否下载最新版本？", "提示", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(release.html_url);
+
+                    }
+
+                }
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error); }
+
+        }
+
 
     }
 }
