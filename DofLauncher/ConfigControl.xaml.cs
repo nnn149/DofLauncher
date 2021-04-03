@@ -36,8 +36,6 @@ namespace DofLauncher
         {
             try
             {
-
-
                 var c = ConfigUtil.GetInstance();
                 c.MysqlAcc = TxtAcc.Text;
                 c.MysqlIP = TxtIP.Text;
@@ -45,23 +43,23 @@ namespace DofLauncher
                 c.MysqlPwd = Pwd.Password;
                 c.save();
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private async void BtnTest_Click(object sender, RoutedEventArgs e)
         {
-            try
+
+            var r = AppDb.Test(TxtIP.Text, TxtPort.Text, TxtAcc.Text, Pwd.Password);
+            await r;
+            if (r.Result == true)
             {
-             new DofMysql(ConfigUtil.GetInstance()).Test();
-                MessageBox.Show("成功");
+                MessageBox.Show("连接成功");
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("连接失败");
             }
+
         }
     }
 }

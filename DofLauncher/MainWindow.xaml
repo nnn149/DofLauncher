@@ -8,7 +8,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     WindowStartupLocation="CenterScreen"
-    Title="滑里DOF稽登陆器" 
+    Title="滑里稽DOF登陆器" 
     AutomationProperties.Name="{Binding Title, RelativeSource={RelativeSource Self}}"
     Height="380"
     Width="300"  >
@@ -88,11 +88,13 @@
                             StaysOpen="False">
                             <StackPanel>
                                 <Button
+                                    Name="BtnAbout"
                                     Content="关于"
-                                    Click="MenuPopupButton_OnClick"/>
+                                    Click="BtnAbout_Click"/>
                                 <Button
+                                    Name="BtnUpdate"
                                     Content="检查更新"
-                                    Click="MenuPopupButton_OnClick"/>
+                                    Click="BtnUpdate_Click"/>
                             </StackPanel>
                         </materialDesign:PopupBox>
                         <TextBlock

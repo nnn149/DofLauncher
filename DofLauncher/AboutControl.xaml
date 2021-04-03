@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="DofLauncher.AboutControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DofLauncher"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             >
+
+    <materialDesign:Card
+                        Width="250"
+                       
+                        Height="300">
+        <Grid VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center"
+                                    Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                    Margin="16 16 16 8"
+                                    Text="滑里稽登陆器"/>
+            <Image  Grid.Row="1" Source="/snhj.png" Width="64"
+                                Height="64"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"></Image>
+       
+            <StackPanel Grid.Row="1" Grid.Column="1">
+          
+
+                <TextBlock
+                                    TextWrapping="Wrap"
+                                    Margin="16 0 16 8"
+                                    Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                    VerticalAlignment="Top"
+                                    Text="This project is completely open source. If you like it and want to say thanks you could hit the GitHub Star button, tweet or post about it, or tell your mum about it!"/>
+            </StackPanel>
+
+            <Border
+                                Grid.Row="2"
+                                Grid.ColumnSpan="2"
+                                BorderThickness="0 1 0 0"
+                                BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                Padding="8">
+                <DockPanel>
+
+                    <DockPanel        DockPanel.Dock="Right">
+                        <Button DockPanel.Dock="Top"
+                                        Style="{DynamicResource MaterialDesignFlatButton}" 
+                                        x:Name="BtnDonate"
+                                       >
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Gift"/>
+                                <TextBlock
+                                                Margin="8 0 0 0"
+                                                VerticalAlignment="Center"
+                                                Text="Donate"/>
+                            </StackPanel>
+                        </Button>
+                        <Button DockPanel.Dock="Bottom"    x:Name="BtnClose" 
+                                        Style="{DynamicResource MaterialDesignFlatButton}" Foreground="#FFDE4949" Click="BtnClose_Click"
+                                       >
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CloseBoxMultiple"/>
+                                <TextBlock
+                                                Margin="8 0 0 0"
+                                                VerticalAlignment="Center"
+                                                Text="Close"/>
+                            </StackPanel>
+                        </Button>
+
+                    </DockPanel>
+                
+                    <TextBlock
+                                        Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                        TextWrapping="Wrap"
+                                        Margin="16"
+                                        VerticalAlignment="Center"
+                                        Text="Feel like you want to make a donation?  "/>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>

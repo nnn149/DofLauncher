@@ -21,13 +21,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">用户：</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Username}"></TextBox>
+        <TextBox Name="TxtUser" Grid.Row="0" Grid.Column="1" ></TextBox>
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">密码：</TextBlock>
-        <PasswordBox Grid.Row="1" Grid.Column="1"></PasswordBox>
-        <Button Grid.Row="2" Grid.ColumnSpan="2" Name="BtnLogin" Cursor="Hand" >用户名密码登录</Button>
+        <PasswordBox Name="Pwd" Grid.Row="1" Grid.Column="1" ></PasswordBox>
+        <Button Grid.Row="2" Grid.ColumnSpan="2" Name="BtnLogin" Cursor="Hand" Click="BtnLogin_Click" >用户名密码登录</Button>
         <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">UID：</TextBlock>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Uid}"></TextBox>
-        <Button Grid.Row="4" Grid.ColumnSpan="2" Name="BtnUIDLogin">UID登录</Button>
+        <TextBox Name="TxtUID" Grid.Row="3" Grid.Column="1" ></TextBox>
+        <Button Grid.Row="4" Grid.ColumnSpan="2" Name="BtnUIDLogin" Click="BtnUIDLogin_Click">UID登录</Button>
 
     </Grid>
 </UserControl>
