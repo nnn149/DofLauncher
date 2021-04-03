@@ -4,21 +4,128 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DofLauncher"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="400">
-    <Grid>
-        <StackPanel>
-            <TextBox Text="{Binding Uid}"></TextBox>
-            <TextBox Text="{Binding Username}"></TextBox>
-            <TextBox Text="{Binding UserPwd}"></TextBox>
-            <TextBox Text="{Binding MysqlIP}"></TextBox>
-            <TextBox Text="{Binding MysqlPort}"></TextBox>
-            <TextBox Text="{Binding MysqlAcc}"></TextBox>
-            <TextBox Text="{Binding MysqlPwd}"></TextBox>
-            <Button Name="BtnLogin" Click="BtnLogin_Click">用户名密码登录</Button>
-            <Button Name="BtnUIDLogin" Click="BtnUIDLogin_Click">UID登录</Button>
-            <Button Name="BtnReg" Click="BtnReg_Click">注册</Button>
-            <Button Name="BtnUpdate" Click="BtnUpdate_Click">检查更新</Button>
-        </StackPanel>
-    </Grid>
+         xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    mc:Ignorable="d"
+    WindowStartupLocation="CenterScreen"
+    Title="滑里DOF稽登陆器" 
+    AutomationProperties.Name="{Binding Title, RelativeSource={RelativeSource Self}}"
+    Height="380"
+    Width="300"  >
+
+
+    <materialDesign:DialogHost
+        Identifier="RootDialog"
+        DialogTheme="Inherit"
+        SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
+
+        <materialDesign:DrawerHost            IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="120">
+                    <StackPanel         DockPanel.Dock="Top" Orientation="Horizontal">
+                        <Image Margin="16,0,0,0" Source="/snhj.png" Width="37" Height="37"></Image>
+                        <ToggleButton 
+                        Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                        HorizontalAlignment="Right" 
+                        Margin="16,16,0,16"
+                        IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"/>
+                    </StackPanel>
+                   
+                    <TextBox 
+                        x:Name="DemoItemsSearchBox"
+                        Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                        DockPanel.Dock="Top"
+                        Margin="16, 4"
+                        Width="100"
+                        
+                        materialDesign:HintAssist.Hint="搜索"
+                        materialDesign:HintAssist.IsFloating="True"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                        materialDesign:TextFieldAssist.DecorationVisibility="Collapsed"
+                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4" FontSize="14"/>
+
+                    <ListBox 
+                        x:Name="DemoItemsListBox" 
+                        Margin="0 16 0 16"
+                        SelectedIndex="{Binding SelectedIndex}"
+                        SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding DemoItems}"
+                        PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp"
+                        AutomationProperties.Name="DemoPagesListBox">
+                        <ListBox.Resources>
+                            <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
+                        </ListBox.Resources>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="domain:DemoItem">
+                                <TextBlock Text="{Binding Name}" Margin="32 0 32 0" AutomationProperties.AutomationId="DemoItemPage" FontSize="16"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+
+            <DockPanel>
+                <materialDesign:ColorZone
+                    Padding="16"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                    Mode="PrimaryMid"
+                    DockPanel.Dock="Top">
+                    <DockPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <ToggleButton
+                                x:Name="MenuToggleButton"
+                                Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                IsChecked="False"
+                                Click="MenuToggleButton_OnClick"
+                                AutomationProperties.Name="菜单"/>
+                        </StackPanel>
+
+                        <materialDesign:PopupBox
+                            DockPanel.Dock="Right"
+                            PlacementMode="BottomAndAlignRightEdges"
+                            StaysOpen="False">
+                            <StackPanel>
+                                <Button
+                                    Content="关于"
+                                    Click="MenuPopupButton_OnClick"/>
+                                <Button
+                                    Content="检查更新"
+                                    Click="MenuPopupButton_OnClick"/>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="22"
+                            AutomationProperties.Name="滑里稽登陆器"
+                            Text="{Binding SelectedItem.Title}"/>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+
+
+                <Grid>
+
+                    <ScrollViewer
+                        x:Name="MainScrollViewer"
+                        materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
+                        HorizontalScrollBarVisibility="{Binding SelectedItem.HorizontalScrollBarVisibilityRequirement, FallbackValue=Disabled}"
+                        VerticalScrollBarVisibility="{Binding SelectedItem.VerticalScrollBarVisibilityRequirement, FallbackValue=Disabled}" >
+                        <ContentControl
+                            DataContextChanged="OnSelectedItemChanged"
+                            DataContext="{Binding SelectedItem}"
+                            Margin="{Binding MarginRequirement, FallbackValue=16}"
+                            Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"/>
+                    </ScrollViewer>
+                    <materialDesign:Snackbar
+                        x:Name="MainSnackbar"
+                        MessageQueue="{materialDesign:MessageQueue}"/>
+
+                </Grid>
+
+            </DockPanel>
+        </materialDesign:DrawerHost>
+    </materialDesign:DialogHost>
+
 </Window>

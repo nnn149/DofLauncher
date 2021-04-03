@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace DofLauncher
 {
@@ -16,7 +17,10 @@ namespace DofLauncher
         {
             ConnectionString = "server=" + main.MysqlIP + ";port=" + main.MysqlPort + ";user=" + main.MysqlAcc + ";password=" + main.MysqlPwd + ";Database=";
         }
-
+        public DofMysql(ConfigUtil config)
+        {
+            ConnectionString = "server=" + config.MysqlIP + ";port=" + config.MysqlPort + ";user=" + config.MysqlAcc + ";password=" + config.MysqlPwd + ";Database=";
+        }
         public string Reg(string usernmae, string pwd, int cera = 0, string qq = "", string ip = "")
         {
 
@@ -103,7 +107,18 @@ namespace DofLauncher
             return false;
         }
 
+        public  bool Test()
+        {
 
+            using (MySqlConnection c = new MySqlConnection(ConnectionString + "d_taiwan"))
+            {
+                MessageBox.Show("1");
+                c.Open();
+                MessageBox.Show("2");
+                return true;
+            }
+       
+        }
 
 
     }

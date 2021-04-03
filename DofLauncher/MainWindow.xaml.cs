@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using MaterialDesignDemo.Domain;
+using MaterialDesignThemes.Wpf;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -6,7 +8,9 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Windows;
-
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace DofLauncher
 {
@@ -144,8 +148,33 @@ rm1dLzMzyruMe+wX5tGzHzMGlRBAaIc3B0wxx/BZpqRnFnAKXBeIXw==";
             catch (Exception ex) { MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error); }
 
         }
+        private void MenuToggleButton_OnClick(object sender, RoutedEventArgs e)
+               => DemoItemsSearchBox.Focus();
+      
+        private void UIElement_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            //until we had a StaysOpen glag to Drawer, this will help with scroll bars
+            var dependencyObject = Mouse.Captured as DependencyObject;
 
+            while (dependencyObject != null)
+            {
+                if (dependencyObject is ScrollBar) return;
+                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
+            }
 
+            MenuToggleButton.IsChecked = false;
+        }
+        private async void MenuPopupButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var sampleMessageDialog = new SampleMessageDialog
+            {
+                Message = { Text = "欢迎光临" }
+            };
+
+            await DialogHost.Show(sampleMessageDialog, "RootDialog");
+        }
+        private void OnSelectedItemChanged(object sender, DependencyPropertyChangedEventArgs e)
+    => MainScrollViewer.ScrollToHome();
     }
 
 }
