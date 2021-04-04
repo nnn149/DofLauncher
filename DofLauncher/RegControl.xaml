@@ -20,17 +20,20 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
  
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">用户：</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Username}"></TextBox>
+        <TextBox Name="TxtUser" Grid.Row="0" Grid.Column="1" ></TextBox>
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">密码：</TextBlock>
-        <PasswordBox Grid.Row="1" Grid.Column="1"></PasswordBox>
-        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">赠点：</TextBlock>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Username}"></TextBox>
-        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Q Q：</TextBlock>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Username}"></TextBox>
-        <Button Grid.Row="4" Grid.ColumnSpan="2" Name="BtnLogin" Cursor="Hand" >注册</Button>
+        <PasswordBox Name="Pwd1" Grid.Row="1" Grid.Column="1"></PasswordBox>
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">密码：</TextBlock>
+        <PasswordBox Name="Pwd2" Grid.Row="2" Grid.Column="1"></PasswordBox>
+        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" >赠点：</TextBlock>
+        <TextBox Name="TxtCera" Grid.Row="3" Grid.Column="1" Text="0" Cursor="IBeam"></TextBox>
+        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Q Q：</TextBlock>
+        <TextBox Name="TxtQQ" Grid.Row="4" Grid.Column="1"></TextBox>
+        <Button Grid.Row="5" Grid.ColumnSpan="2" Name="BtnReg" Cursor="Hand" Click="BtnReg_Click" >注册</Button>
     </Grid>
 </UserControl>

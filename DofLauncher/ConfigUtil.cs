@@ -1,27 +1,22 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DofLauncher
 {
     public class ConfigUtil
     {
 
-        public int Uid { get; set; }
-        public string Username { get; set; }
-        public string UserPwd { get; set; }
-        public string MysqlIP { get; set; }
-        public string MysqlPort { get; set; }
-        public string MysqlAcc { get; set; }
-        public string MysqlPwd { get; set; }
-        private static string configPath = "config.json";
+        public int? Uid { get; set; }
+        public string? Username { get; set; }
+        public string? UserPwd { get; set; }
+        public string? MysqlIP { get; set; }
+        public string? MysqlPort { get; set; }
+        public string? MysqlAcc { get; set; }
+        public string? MysqlPwd { get; set; }
+        private static readonly string configPath = "config.json";
 
 
-        private static ConfigUtil _ConfigUtil;
+        private static ConfigUtil? _ConfigUtil;
 
         private ConfigUtil()
         {
@@ -50,7 +45,9 @@ namespace DofLauncher
                     try
                     {
                         var c = JsonConvert.DeserializeAnonymousType(File.ReadAllText(configPath), new { Uid = 0, Username = "", UserPwd = "", MysqlIP = "", MysqlPort = "", MysqlAcc = "", MysqlPwd = "" });
+#pragma warning disable CS8602 // 解引用可能出现空引用。
                         _ConfigUtil = new ConfigUtil(c.Uid, c.Username, c.UserPwd, c.MysqlIP, c.MysqlPort, c.MysqlAcc, c.MysqlPwd);
+#pragma warning restore CS8602 // 解引用可能出现空引用。
 
 
                     }
@@ -69,7 +66,7 @@ namespace DofLauncher
             return _ConfigUtil;
         }
 
-        public void save()
+        public void Save()
         {
             File.WriteAllText(configPath, JsonConvert.SerializeObject(this));
         }

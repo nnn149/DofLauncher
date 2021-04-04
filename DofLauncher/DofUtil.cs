@@ -13,7 +13,7 @@ namespace DofLauncher
         {
             if (uid < 1)
             {
-                return"";
+                return "";
             }
             string tou = "0001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
             string wei = "010101010101010101010101010101010101010101010101010101010101010155914510010403030101";
@@ -24,13 +24,9 @@ namespace DofLauncher
         }
         private static string Decrypt(byte[] payLoad, string privateKey)
         {
-            using (var key = OpenSSL.Crypto.CryptoKey.FromPrivateKey(Convert.FromBase64String(privateKey)))
-            {
-                using (var rsa = key.GetRSA())
-                {
-                    return Convert.ToBase64String(rsa.PrivateDecrypt(payLoad, OpenSSL.Crypto.RSA.Padding.None));
-                }
-            }
+            using var key = OpenSSL.Crypto.CryptoKey.FromPrivateKey(Convert.FromBase64String(privateKey));
+            using var rsa = key.GetRSA();
+            return Convert.ToBase64String(rsa.PrivateDecrypt(payLoad, OpenSSL.Crypto.RSA.Padding.None));
         }
         public static byte[] StrToToHexByte(string hexString)
         {
@@ -43,13 +39,13 @@ namespace DofLauncher
             return returnBytes;
         }
 
-        public static string MD5Encrypt(string str, string key="")
+        public static string MD5Encrypt(string str, string key = "")
         {
             string signStr = key + str;
-            MD5CryptoServiceProvider md5Hasher = new MD5CryptoServiceProvider();
+            MD5CryptoServiceProvider md5Hasher = new();
             byte[] hashedDataBytes;
             hashedDataBytes = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(signStr));
-            StringBuilder tmp = new StringBuilder();
+            StringBuilder tmp = new();
             foreach (byte i in hashedDataBytes)
             {
                 tmp.Append(i.ToString("x2"));

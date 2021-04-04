@@ -15,32 +15,32 @@
         <Grid VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center"
                                     Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                                    Margin="16 16 16 8"
+                                    Margin="0,4,0,4"
                                     Text="滑里稽登陆器"/>
             <Image  Grid.Row="1" Source="/snhj.png" Width="64"
                                 Height="64"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"></Image>
-       
+
             <StackPanel Grid.Row="1" Grid.Column="1">
-          
+
 
                 <TextBlock
                                     TextWrapping="Wrap"
                                     Margin="16 0 16 8"
                                     Foreground="{DynamicResource MaterialDesignBodyLight}"
                                     VerticalAlignment="Top"
-                                    Text="This project is completely open source. If you like it and want to say thanks you could hit the GitHub Star button, tweet or post about it, or tell your mum about it!"/>
+                                    Text="滑里稽登陆器开源免费;&#x000A;不含免Host,输入法等插件;&#x000A;程序未加密,建议只在单人游戏使用;&#x000A;建议配合'DOF补丁大合集'使用;&#x000A;有BUG问题请到Gihub发Issues" FontSize="14"/>
             </StackPanel>
 
             <Border
@@ -54,14 +54,14 @@
                     <DockPanel        DockPanel.Dock="Right">
                         <Button DockPanel.Dock="Top"
                                         Style="{DynamicResource MaterialDesignFlatButton}" 
-                                        x:Name="BtnDonate"
+                                        x:Name="BtnDonate" Click="BtnDonate_Click" Cursor="Hand" Foreground="#FF918C9B"
                                        >
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Gift"/>
+                                <materialDesign:PackIcon Kind="StarOutline"/>
                                 <TextBlock
-                                                Margin="8 0 0 0"
+                                               
                                                 VerticalAlignment="Center"
-                                                Text="Donate"/>
+                                                Text="Star!"/>
                             </StackPanel>
                         </Button>
                         <Button DockPanel.Dock="Bottom"    x:Name="BtnClose" 
@@ -70,20 +70,20 @@
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="CloseBoxMultiple"/>
                                 <TextBlock
-                                                Margin="8 0 0 0"
+                                                
                                                 VerticalAlignment="Center"
                                                 Text="Close"/>
                             </StackPanel>
                         </Button>
 
                     </DockPanel>
-                
+
                     <TextBlock
                                         Foreground="{DynamicResource MaterialDesignBodyLight}"
                                         TextWrapping="Wrap"
                                         Margin="16"
                                         VerticalAlignment="Center"
-                                        Text="Feel like you want to make a donation?  "/>
+                                        Text="If you like this program, click Star!"/>
                 </DockPanel>
             </Border>
         </Grid>

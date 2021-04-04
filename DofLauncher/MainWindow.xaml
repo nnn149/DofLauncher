@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DofLauncher"
          xmlns:system="clr-namespace:System;assembly=mscorlib"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    mc:Ignorable="d"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" d:DataContext="{d:DesignInstance Type=local:MainWindowModel}"
+        mc:Ignorable="d"
     WindowStartupLocation="CenterScreen"
     Title="滑里稽DOF登陆器" 
     AutomationProperties.Name="{Binding Title, RelativeSource={RelativeSource Self}}"
     Height="380"
-    Width="300"  >
-
+    Width="300"  
+        >
+    
 
     <materialDesign:DialogHost
         Identifier="RootDialog"

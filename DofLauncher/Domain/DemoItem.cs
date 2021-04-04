@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,9 +13,9 @@ namespace MaterialDesignDemo.Domain
 
         private ScrollBarVisibility _horizontalScrollBarVisibilityRequirement;
         private ScrollBarVisibility _verticalScrollBarVisibilityRequirement = ScrollBarVisibility.Auto;
-        private Thickness _marginRequirement = new Thickness(16);
+        private Thickness _marginRequirement = new(16);
 
-        public DemoItem(string name, object? content,string title)
+        public DemoItem(string name, object? content, string title)
         {
             _name = name;
             Content = content;

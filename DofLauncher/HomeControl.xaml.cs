@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DofLauncher
 {
@@ -21,7 +11,7 @@ namespace DofLauncher
     /// </summary>
     public partial class HomeControl : UserControl
     {
-        string privateKey = @"MIIEpAIBAAKCAQEAnA5hdnlSGwUNA24oQH+l3wLwha6M9HL4HVKYE3d29Xj9AkRJ
+        readonly string privateKey = @"MIIEpAIBAAKCAQEAnA5hdnlSGwUNA24oQH+l3wLwha6M9HL4HVKYE3d29Xj9AkRJ
 A/GFGJS4rxn2DlE5rWRFfB0aFyUNHakMtzWSWj8szEWxlEp9cceAOhUK+tGaz3BW
 bWCIOPENR6XBG8Oo9qd9z7KOOyDGJtxsRWSFuOeCEeTHMsYcUDgqTsycNx5E5qyK
 Ztg1TFM1UFNwB7ACtYuBDPUyQAt+3feHlF34Nc+cEMPNEGrFWqBTZHwyYOPdO2OS
@@ -62,15 +52,12 @@ rm1dLzMzyruMe+wX5tGzHzMGlRBAaIc3B0wxx/BZpqRnFnAKXBeIXw==";
             try
             {
                 var UID = await DofMysql.GetUID(TxtUser.Text, Pwd.Password);
-                Process.Start("dnf.exe", DofUtil.GenerateLoginParam(UID, privateKey));
-                try
-                {
-                    var c = ConfigUtil.GetInstance();
-                    c.Username = TxtUser.Text;
-                    c.UserPwd = Pwd.Password;
-                    c.save();
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "保存信息错误", MessageBoxButton.OK, MessageBoxImage.Error); }
+                await Login(UID, (Button)sender, "用户名密码登录");
+                var c = ConfigUtil.GetInstance();
+                c.Username = TxtUser.Text;
+                c.UserPwd = Pwd.Password;
+                c.Save();
+
 
             }
             catch (Exception ex)
@@ -79,26 +66,49 @@ rm1dLzMzyruMe+wX5tGzHzMGlRBAaIc3B0wxx/BZpqRnFnAKXBeIXw==";
             }
         }
 
-        private void BtnUIDLogin_Click(object sender, RoutedEventArgs e)
+        private async void BtnUIDLogin_Click(object sender, RoutedEventArgs e)
         {
 
             try
             {
-                int UID = int.Parse(TxtUID.Text);
-                Process.Start("dnf.exe", DofUtil.GenerateLoginParam(UID, privateKey));
-                try
-                {
-                    var c = ConfigUtil.GetInstance();
-                    c.Uid = UID;
-                    c.save();
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "保存信息错误", MessageBoxButton.OK, MessageBoxImage.Error); }
-
+                await Login(int.Parse(TxtUID.Text), (Button)sender, "UID登录");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        private async Task Login(int UID, Button btn, string Content)
+        {
+            btn.IsEnabled = false;
+            MaterialDesignThemes.Wpf.ButtonProgressAssist.SetIsIndeterminate(btn, true);
+            MaterialDesignThemes.Wpf.ButtonProgressAssist.SetIsIndicatorVisible(btn, true);
+            btn.Content = "正在启动...";
+
+            await Task.Run(async () =>
+            {
+                var c = ConfigUtil.GetInstance();
+                c.Uid = UID;
+                c.Save();
+                Process.Start("dnf.exe", DofUtil.GenerateLoginParam(UID, privateKey));
+                //检测30秒内
+                for (int i = 0; i < 120; i++)
+                {
+                    Debug.WriteLine(i);
+                    await Task.Delay(500);
+                    Process[] processList = Process.GetProcessesByName("DNF");
+                    if (processList.Length > 0)
+                    {
+                        break;
+                    }
+                }
+                await Task.Delay(2000);
+
+            });
+            btn.IsEnabled = true;
+            btn.Content = Content;
+            MaterialDesignThemes.Wpf.ButtonProgressAssist.SetIsIndeterminate(btn, false);
+            MaterialDesignThemes.Wpf.ButtonProgressAssist.SetIsIndicatorVisible(btn, false);
         }
     }
 }

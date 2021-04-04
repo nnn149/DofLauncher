@@ -1,14 +1,6 @@
-﻿using MaterialDesignDemo;
-using MaterialDesignDemo.Domain;
-using MaterialDesignThemes.Wpf;
-using System;
-using System.Collections.Generic;
+﻿using MaterialDesignDemo.Domain;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace DofLauncher
@@ -16,27 +8,11 @@ namespace DofLauncher
     public class MainWindowModel : INotifyPropertyChanged
     {
 
-        public int Uid { get; set; }
-        public string Username { get; set; }
-        public string UserPwd { get; set; }
-        public string MysqlIP { get; set; }
-        public string MysqlPort { get; set; }
-        public string MysqlAcc { get; set; }
-        public string MysqlPwd { get; set; }
 
 
-
-
-
-        public MainWindowModel(int uid, string username, string userPwd, string mysqlIP, string mysqlPort, string mysqlAcc, string mysqlPwd)
+        public MainWindowModel()
         {
-            Uid = uid;
-            Username = username;
-            UserPwd = userPwd;
-            MysqlIP = mysqlIP;
-            MysqlPort = mysqlPort;
-            MysqlAcc = mysqlAcc;
-            MysqlPwd = mysqlPwd;
+
             DemoItems = new ObservableCollection<DemoItem>(new[]
            {
                new DemoItem("登录",new HomeControl(),"滑里稽登陆器"),

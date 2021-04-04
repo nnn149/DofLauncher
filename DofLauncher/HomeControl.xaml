@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-
+ xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     FontSize="16"
     mc:Ignorable="d" >
 
@@ -27,7 +27,12 @@
         <Button Grid.Row="2" Grid.ColumnSpan="2" Name="BtnLogin" Cursor="Hand" Click="BtnLogin_Click" >用户名密码登录</Button>
         <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">UID：</TextBlock>
         <TextBox Name="TxtUID" Grid.Row="3" Grid.Column="1" ></TextBox>
-        <Button Grid.Row="4" Grid.ColumnSpan="2" Name="BtnUIDLogin" Click="BtnUIDLogin_Click">UID登录</Button>
-
+        <Button Grid.Row="4" Grid.ColumnSpan="2" Name="BtnUIDLogin" Click="BtnUIDLogin_Click"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                            materialDesign:ButtonProgressAssist.Value="-1"
+                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="False"
+                            materialDesign:ButtonProgressAssist.IsIndeterminate="False" Cursor="Hand"
+                >UID登录</Button>
+ 
     </Grid>
 </UserControl>

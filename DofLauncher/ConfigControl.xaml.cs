@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DofLauncher
 {
@@ -41,7 +30,8 @@ namespace DofLauncher
                 c.MysqlIP = TxtIP.Text;
                 c.MysqlPort = TxtPort.Text;
                 c.MysqlPwd = Pwd.Password;
-                c.save();
+                c.Save();
+                MessageBox.Show("保存成功", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
@@ -53,11 +43,11 @@ namespace DofLauncher
             await r;
             if (r.Result == true)
             {
-                MessageBox.Show("连接成功");
+                MessageBox.Show("连接成功", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("连接失败");
+                MessageBox.Show("连接失败", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
