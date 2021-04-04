@@ -28,7 +28,7 @@ namespace DofLauncher
                         {
                             UID = Convert.ToInt32(result) + 1;
                         }
-                        cmd.CommandText = "insert into d_taiwan.accounts (UID,accountname,password,qq,ip) VALUES ('" + UID + "','" + usernmae + "','" + DofUtil.MD5Encrypt(pwd) + "','" + qq + "','" + ip + "')";
+                        cmd.CommandText = "insert into d_taiwan.accounts (UID,accountname,password,qq) VALUES ('" + UID + "','" + usernmae + "','" + DofUtil.MD5Encrypt(pwd) + "','" + qq + "')";
                         if (await cmd.ExecuteNonQueryAsync() > 0)
                         {
                             cmd.CommandText = "insert into d_taiwan.limit_create_character (m_id) VALUES ('" + UID + "')";

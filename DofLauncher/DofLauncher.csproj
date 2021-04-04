@@ -14,10 +14,10 @@
     <PackageProjectUrl>https://github.com/nnn149/DofLauncher</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nnn149/DofLauncher</RepositoryUrl>
     <PackageIcon>snhj.png</PackageIcon>
-    <AssemblyVersion>3.0.1.0</AssemblyVersion>
-    <Version>3.0.1</Version>
+    <AssemblyVersion>3.0.2.0</AssemblyVersion>
+    <Version>3.0.2</Version>
     <NeutralLanguage>zh-Hans</NeutralLanguage>
-    <FileVersion>3.0.1.0</FileVersion>
+    <FileVersion>3.0.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
