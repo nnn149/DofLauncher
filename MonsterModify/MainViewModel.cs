@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -22,6 +23,17 @@ namespace MonsterModify
         private double _hellMode;
         private double _unknownMode;
         private readonly MonsterUtil _monsterUtil = MonsterUtil.Instance;
+        private ObservableCollection<Monster> _monsterList;
+
+        public ObservableCollection<Monster> MonsterList
+        {
+            get => _monsterList;
+            set
+            {
+                _monsterList = value;
+                OnPropertyChanged();
+            }
+        }
 
         public double NormalMode
         {
@@ -87,14 +99,15 @@ namespace MonsterModify
         }
 
         public IAsyncRelayCommand SaveAllMonsterAttributeCommand { get; set; }
-
+        public IAsyncRelayCommand LoadAllMonstersCommand { get; set; }
 
         public MainViewModel()
         {
-            SaveAllMonsterAttributeCommand = new AsyncRelayCommand(SaveAllMonsterAttribute);
+            SaveAllMonsterAttributeCommand = new AsyncRelayCommand(SaveAllMonsterAttributeAsync);
+            LoadAllMonstersCommand = new AsyncRelayCommand(LoadAllMonstersAsync);
         }
 
-        private async Task SaveAllMonsterAttribute()
+        private async Task SaveAllMonsterAttributeAsync()
         {
             _monsterUtil.MainData[AllMonsterAttributeListIndex, 0] = NormalMode;
             _monsterUtil.MainData[AllMonsterAttributeListIndex, 1] = AdventureMode;
@@ -105,6 +118,12 @@ namespace MonsterModify
                 MessageBox.Show("保存成功");
             else
                 MessageBox.Show("保存失败");
+        }
+
+        private async Task LoadAllMonstersAsync()
+        {
+           await _monsterUtil.LoadMonsters();
+           MonsterList = new ObservableCollection<Monster>(_monsterUtil.Monsters);
         }
 
         private void UpdateMonsterAttribute()

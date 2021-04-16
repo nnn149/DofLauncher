@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace MonsterModify
         private string dataStr;
         public double[,] MainData = new double[13, 5];
         private double[,] _extraData = new double[26, 4];
+        public List<Monster> Monsters;
 
 
         public async void Init()
@@ -58,6 +60,37 @@ namespace MonsterModify
                 m => m.Groups[1].Value + str + m.Groups[3].Value);
             if (await PvfUtil.SaveFileAsync(TblPath, data)) return true;
             return false;
+        }
+
+        public async Task LoadMonsters()
+        {
+            try
+            {
+                var pathStr = await PvfUtil.GetFileListAsync("monster");
+                await Task.Run(async () =>
+                {
+                    var res = new Regex(".*mob").Matches(pathStr);
+                    Monsters = new List<Monster>(res.Count);
+                    for (var i = 0; i < res.Count; i++)
+                    {
+                        var mStr = await PvfUtil.GetFileAsync(res[i].Groups[0].Value);
+                        var res2 = new Regex(@"name].*\n.*`(.+)`").Matches(mStr);
+                        if (res2.Count < 1)
+                        {
+                            Debug.WriteLine("Regular processing error" + i);
+                            continue;
+                        }
+
+                        Monster m = new Monster(res2[0].Groups[1].Value, res[i].Groups[0].Value);
+                        Monsters.Add(m);
+                    }
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", ex.Message);
+            }
         }
 
 

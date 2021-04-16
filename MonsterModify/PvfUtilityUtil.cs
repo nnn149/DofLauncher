@@ -28,5 +28,12 @@ namespace MonsterModify
             if (response.StatusCode == HttpStatusCode.OK) return true;
             return false;
         }
+
+        public async Task<string> GetFileListAsync(string path)
+        {
+            var response = await Client.GetAsync(GetFileListUrl + path);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody;
+        }
     }
 }
