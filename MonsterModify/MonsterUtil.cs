@@ -8,43 +8,55 @@ using System.Threading.Tasks;
 
 namespace MonsterModify
 {
-    public class MonsterUtil
+    public sealed class MonsterUtil
     {
-        private static readonly string RegexAllMonsterAttributes = @"PVF_File([\s\S]*?)\[";
+        private static readonly Lazy<MonsterUtil> Lazy = new(() => new MonsterUtil());
+        private static readonly IPvfUtil PvfUtil = new PvfUtilityUtil();
+        public static MonsterUtil Instance => Lazy.Value;
+
+        private MonsterUtil()
+        {
+            Init();
+            Debug.WriteLine("MonsterUtil Init！");
+        }
+
+        private static readonly string RegexAllMonsterAttributes = @"(PVF_File[\n|\r\n]*)([\s\S]*?)([\n|\r\n]*\[)";
         private static readonly string TblPath = "monster/monsterapcdifficultybonus.tbl";
 
-        private string _dataStr;
+        private string dataStr;
         public double[,] MainData = new double[13, 5];
         private double[,] _extraData = new double[26, 4];
 
-        public async Task Init()
+
+        public async void Init()
         {
-            _dataStr = await PvfUtil.GetFile(TblPath);
-            var strings = new Regex(RegexAllMonsterAttributes).Match(_dataStr).Groups[1].Value.Trim().Replace("\r", "")
+            if (!string.IsNullOrEmpty(dataStr)) return;
+
+            dataStr = await PvfUtil.GetFileAsync(TblPath);
+            var strings = new Regex(RegexAllMonsterAttributes).Match(dataStr).Groups[2].Value.Trim().Replace("\r", "")
                 .Split('\n');
             for (var i = 0; i < 13; i++)
-            {
-                for (var j = 0; j < 5; j++)
-                    MainData[i, j] = double.Parse(strings[i * 5 + j]);
-            }
+            for (var j = 0; j < 5; j++)
+                MainData[i, j] = double.Parse(strings[i * 5 + j]);
+
             for (var i = 0; i < 26; i++)
-            {
-                for (var j = 0; j < 4; j++)
-                    _extraData[i, j] = double.Parse(strings[i * 4 + j + 65]);
-            }
+            for (var j = 0; j < 4; j++)
+                _extraData[i, j] = double.Parse(strings[i * 4 + j + 65]);
         }
 
-        public async Task<bool> SaveTbl(double[,] data)
+        public async Task<bool> SaveTbl()
         {
-            for (var i = 0; i < data.GetLength(0); i++)
-            for (var j = 0; j < data.GetLength(1); j++)
-                _dataStr += data[i, j] + "\r\n";
-            _dataStr = _dataStr.Substring(0, _dataStr.Length - 2);
-            if (await PvfUtil.SaveFile(TblPath, _dataStr))
-            {
-                return true;
-            }
-
+            var str = "";
+            for (var i = 0; i < MainData.GetLength(0); i++)
+            for (var j = 0; j < MainData.GetLength(1); j++)
+                str += MainData[i, j].ToString("F2") + "\r\n";
+            for (var i = 0; i < _extraData.GetLength(0); i++)
+            for (var j = 0; j < _extraData.GetLength(1); j++)
+                str += _extraData[i, j].ToString("F2") + "\r\n";
+            str = str.Substring(0, str.Length - 2);
+            var data = Regex.Replace(dataStr, RegexAllMonsterAttributes,
+                m => m.Groups[1].Value + str + m.Groups[3].Value);
+            if (await PvfUtil.SaveFileAsync(TblPath, data)) return true;
             return false;
         }
 
