@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DofLauncher", "DofLauncher\DofLauncher.csproj", "{6EBAED98-0FBA-4E2D-B1F4-02220073AF58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DofLauncher", "DofLauncher\DofLauncher.csproj", "{6EBAED98-0FBA-4E2D-B1F4-02220073AF58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonsterModify", "MonsterModify\MonsterModify.csproj", "{78C58F45-3598-46A7-823C-1B05540E4834}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,14 @@ Global
 		{6EBAED98-0FBA-4E2D-B1F4-02220073AF58}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6EBAED98-0FBA-4E2D-B1F4-02220073AF58}.Release|x86.ActiveCfg = Release|x86
 		{6EBAED98-0FBA-4E2D-B1F4-02220073AF58}.Release|x86.Build.0 = Release|x86
+		{78C58F45-3598-46A7-823C-1B05540E4834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78C58F45-3598-46A7-823C-1B05540E4834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78C58F45-3598-46A7-823C-1B05540E4834}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{78C58F45-3598-46A7-823C-1B05540E4834}.Debug|x86.Build.0 = Debug|Any CPU
+		{78C58F45-3598-46A7-823C-1B05540E4834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78C58F45-3598-46A7-823C-1B05540E4834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78C58F45-3598-46A7-823C-1B05540E4834}.Release|x86.ActiveCfg = Release|Any CPU
+		{78C58F45-3598-46A7-823C-1B05540E4834}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
