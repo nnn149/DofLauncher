@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using MonsterModify.Annotations;
 
 namespace MonsterModify
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : ObservableObject
     {
         private int _allMonsterAttributeListIndex;
 
@@ -21,6 +23,7 @@ namespace MonsterModify
             {
                 _allMonsterAttributeListIndex = value;
                 OnPropertyChanged();
+                UpdateMonsterAttribute();
             }
         }
 
@@ -36,12 +39,9 @@ namespace MonsterModify
             AllMonsterAttributeListIndex++;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void UpdateMonsterAttribute()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Debug.WriteLine("asd");
         }
     }
 }
