@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -23,7 +24,7 @@ namespace MonsterModify
     /// </summary>
     public partial class MainWindow : Window
     {
-        static readonly HttpClient client = new HttpClient();
+        private static readonly HttpClient client = new();
 
         public MainWindow()
         {
@@ -35,9 +36,9 @@ namespace MonsterModify
             // Call asynchronous network methods in a try/catch block to handle exceptions.
             try
             {
-                HttpResponseMessage response = await client.GetAsync("http://127.0.0.1:27000/list?path=monster");
+                var response = await client.GetAsync("http://127.0.0.1:27000/list?path=monster");
                 response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
+                var responseBody = await response.Content.ReadAsStringAsync();
                 // Above three lines can be replaced with new helper method below
                 // string responseBody = await client.GetStringAsync(uri);
 
@@ -47,7 +48,7 @@ namespace MonsterModify
                 Debug.WriteLine(res.Count);
 
 
-                for (int i = 0; i < res.Count; i++)
+                for (var i = 0; i < res.Count; i++)
                 {
                     response = await client.GetAsync("http://127.0.0.1:27000/file?name=" + res[i].Groups[0].Value);
                     responseBody = await response.Content.ReadAsStringAsync();
@@ -87,48 +88,52 @@ namespace MonsterModify
             var r = new Regex(zz);
             var value = r.Match(tbl).Groups[1].Value.Trim().Replace("\r", "");
             var strings = value.Split('\n');
-            for (int i = 0; i < 13; i++)
+            for (var i = 0; i < 13; i++)
             {
                 var a = $"第{i}组：";
-                for (int j = 0; j < 5; j++)
-                {
+                for (var j = 0; j < 5; j++)
                     // data[i] = new List<double>(5);
                     data[i, j] = double.Parse(strings[i * 5 + j]);
-                }
             }
 
-            for (int i = 0; i < data.GetLength(0); i++)
+            var data2 = new double[26, 4];
+            for (var i = 0; i < 26; i++)
             {
                 var a = $"第{i}组：";
-                for (int j = 0; j < data.GetLength(1); j++)
-                {
-                    a += " " + data[i, j];
-                }
-
-                Debug.WriteLine(a);
+                for (var j = 0; j < 4; j++)
+                    // data[i] = new List<double>(5);
+                    data2[i, j] = double.Parse(strings[i * 4 + j + 65]);
             }
+
+            SaveTbl(data2);
         }
-        /*
-0 好战
-1 视野
-2 命中增加
-3 回避增加
-4 怪物血量倍率
-5 攻击动作速度
-6 移动速度增加
-7 异常状态抵抗
-8 伤害增加
-9 防御增加 （这2个数据 应该有差别 和普通攻击防御）
-10 硬直抵抗
-11 无视防御的攻击
-12 无视攻击的防御
-         */
+
 
         public async Task<string> GetFile(string fileName)
         {
             var response = await client.GetAsync("http://127.0.0.1:27000/file?name=" + fileName);
             var responseBody = await response.Content.ReadAsStringAsync();
             return responseBody;
+        }
+
+        public async Task SaveTbl(double[,] data)
+        {
+            var a = "";
+            for (var i = 0; i < data.GetLength(0); i++)
+            {
+                for (var j = 0; j < data.GetLength(1); j++) a += data[i, j] + "\r\n";
+            }
+
+            a = a.Substring(0, a.Length - 2);
+            
+            Debug.WriteLine(a);
+        }
+
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+
+
+
         }
     }
 }

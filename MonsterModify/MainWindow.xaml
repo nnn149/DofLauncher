@@ -6,7 +6,59 @@
         xmlns:local="clr-namespace:MonsterModify"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
     <Grid>
+        <Button Content="读取列表" HorizontalAlignment="Left" Margin="50,128,0,0" VerticalAlignment="Top"
+                Click="Button_Click" />
+        <Button Content="全局怪物" HorizontalAlignment="Left" Margin="145,112,0,0" VerticalAlignment="Top"
+                Click="Button_Click_1" />
+        <Button Content="Button" HorizontalAlignment="Left" Margin="222,138,0,0" VerticalAlignment="Top"
+                Click="Button_Click_2" />
+        <ListBox SelectedIndex="{Binding AllMonsterAttributeListIndex}" HorizontalAlignment="Left" Height="255" Margin="650,10,0,0" VerticalAlignment="Top" Width="140">
+            <ListBoxItem>好战</ListBoxItem>
+            <ListBoxItem>视野</ListBoxItem>
+            <ListBoxItem>命中增加</ListBoxItem>
+            <ListBoxItem>回避增加</ListBoxItem>
+            <ListBoxItem>血量倍率</ListBoxItem>
+            <ListBoxItem>攻击动作速度</ListBoxItem>
+            <ListBoxItem>移动速度增加</ListBoxItem>
+            <ListBoxItem>异常状态抵抗</ListBoxItem>
+            <ListBoxItem>伤害增加</ListBoxItem>
+            <ListBoxItem>防御增加</ListBoxItem>
+            <ListBoxItem>硬直抵抗</ListBoxItem>
+            <ListBoxItem>无视防御的攻击</ListBoxItem>
+            <ListBoxItem>无视攻击的防御</ListBoxItem>
+        </ListBox>
+        <StackPanel Margin="440,97,175,200">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0">普通级:</TextBlock>
+                <TextBox Grid.Row="0" Grid.Column="1" />
+                <TextBlock Grid.Row="1" Grid.Column="0">冒险级:</TextBlock>
+                <TextBox Grid.Row="1" Grid.Column="1" />
+                <TextBlock Grid.Row="2" Grid.Column="0">王者级:</TextBlock>
+                <TextBox Grid.Row="2" Grid.Column="1" />
+                <TextBlock Grid.Row="3" Grid.Column="0">地狱级:</TextBlock>
+                <TextBox Grid.Row="3" Grid.Column="1" />
+                <TextBlock Grid.Row="4" Grid.Column="0">未知级:</TextBlock>
+                <TextBox Grid.Row="4" Grid.Column="1" />
+                <Button Command="{Binding TestCommand}" Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0">保存</Button>
+            </Grid>
 
+        </StackPanel>
     </Grid>
 </Window>
