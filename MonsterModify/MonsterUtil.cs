@@ -64,34 +64,61 @@ namespace MonsterModify
 
         public async Task LoadMonsters()
         {
-            try
-            {
-                var pathStr = await PvfUtil.GetFileListAsync("monster");
-                await Task.Run(async () =>
-                {
-                    var res = new Regex(".*mob").Matches(pathStr);
-                    Monsters = new List<Monster>(res.Count);
-                    for (var i = 0; i < res.Count; i++)
-                    {
-                        var mStr = await PvfUtil.GetFileAsync(res[i].Groups[0].Value);
-                        var res2 = new Regex(@"name].*\n.*`(.+)`").Matches(mStr);
-                        if (res2.Count < 1)
-                        {
-                            Debug.WriteLine("Regular processing error" + i);
-                            continue;
-                        }
+            var pathStr = await PvfUtil.GetFileListAsync("monster");
 
-                        Monster m = new Monster(res2[0].Groups[1].Value, res[i].Groups[0].Value);
-                        Monsters.Add(m);
-                    }
-                });
-            }
-            catch (HttpRequestException ex)
+            var res = new Regex(".*mob").Matches(pathStr);
+            Monsters = new List<Monster>(res.Count);
+            for (var i = 0; i < res.Count; i++)
             {
-                Console.WriteLine("\nException Caught!");
-                Console.WriteLine("Message :{0} ", ex.Message);
+                var mStr = await PvfUtil.GetFileAsync(res[i].Groups[0].Value);
+                //GetAllTag(mStr);
+                var name = new Regex(@"name].*\n.*`(.+)`").Matches(mStr);
+                if (name.Count < 1)
+                {
+                    Debug.WriteLine("Regex processing empty" + i);
+                    continue;
+                }
+
+                var m = new Monster(name[0].Groups[1].Value, res[i].Groups[0].Value);
+                Monsters.Add(m);
             }
+
+            // //排序输出所有标签
+            // var labs = labDictionary.OrderBy(v => v.Value);
+            // foreach (var lab in labs)
+            // {
+            //     Debug.WriteLine($"{lab.Key}:{lab.Value}");
+            // }
         }
+
+        // private static Dictionary<string, int> labDictionary = new();
+        //
+        // private void GetAllTag(string mStr)
+        // {
+        //     try
+        //     {
+        //         var labs = new Regex(@"\[(.*?)\]").Matches(mStr);
+        //
+        //         foreach (Match match in labs)
+        //         {
+        //             int count=0;
+        //             if (labDictionary.TryGetValue(match.Value,out count))
+        //             {
+        //                 labDictionary[match.Value]++;
+        //             }
+        //             else
+        //             {
+        //                 labDictionary.Add(match.Value, 1);
+        //             }
+        //
+        //         }
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Console.WriteLine(e);
+        //         throw;
+        //     }
+        // }
 
 
         /* MainData

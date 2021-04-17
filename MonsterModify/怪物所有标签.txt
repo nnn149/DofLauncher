@@ -1,0 +1,384 @@
+[必杀技]:1
+[ridableobject skill]:1
+[/ridableobject skill]:1
+[explain]:1
+[weak]:1
+[target appendage]:1
+[unbeatable]:1
+[close-cafefully]:1
+[catch item]:1
+[/catch item]:1
+[strong]:1
+[fixed height]:1
+[consume mp]:1
+[/consume mp]:1
+[on time]:1
+[CHARACTER]:1
+[/etc attack infp]:1
+[ATTACK_SPEED]:1
+[MP MAX]:1
+[normal dash speed]:2
+[slant dash speed]:2
+[on damage]:2
+[on go to help]:2
+[on disappear]:2
+[Pattern]:2
+[反击技能]:2
+[come in motion]:2
+[can beat index]:2
+[/can beat index]:2
+[hold]:2
+[divine armor]:2
+[close-manance]:2
+[is on the object]:3
+[come in action ex]:3
+[keep range distance with target 1]:3
+[stun]:3
+[No Combo Rate Monster]:3
+[jumpattack action]:4
+[slow]:4
+[confuse]:4
+[basic action]:4
+[life max]:4
+[full-superarmor]:5
+[diving sight]:5
+[approach attack]:5
+[targeting from direction]:5
+[/pattern]:5
+[no change target]:5
+[/herog]:5
+[super champion drop item]:6
+[/super champion drop item]:6
+[destroy count]:6
+[destroy count damage]:6
+[drop item offset]:6
+[half]:7
+[need hp]:7
+[overhead gauge pos]:7
+[flying mark]:7
+[non targeted]:7
+[physical attack besed on diff]:8
+[/physical attack besed on diff]:8
+[ridableskill explain]:8
+[/ridableskill explain]:8
+[angel]:8
+[pvp]:8
+[/pvp]:8
+[targeting high HP]:8
+[mounting action]:8
+[mounted action]:8
+[unmounting action]:8
+[control passive object]:8
+[index]:8
+[x pos]:8
+[y pos]:8
+[height]:8
+[velocity x]:8
+[velocity y]:8
+[transparency]:8
+[others]:8
+[/transparency]:8
+[/control passive object]:8
+[hell monster]:8
+[is grabable]:9
+[back vision]:9
+[targeting downed]:9
+[reflection object]:9
+[/reflection object]:9
+[dashattack action]:10
+[all attack]:10
+[always]:10
+[targeting low physical defense]:10
+[warp attack]:10
+[warp style]:10
+[target offset]:10
+[after attack]:10
+[after appear time]:10
+[cool time]:10
+[/warp attack]:10
+[out of targetting]:11
+[stay]:11
+[keep distance]:12
+[damage time balance]:13
+[stun time balance]:13
+[dash action]:13
+[连击技能]:13
+[breakable]:14
+[jump attack]:15
+[start frame index]:15
+[end frame index]:15
+[jump type]:15
+[jump height]:15
+[jump direction]:15
+[on collision custom animation index]:15
+[ememy distance rate]:15
+[limited x cood]:15
+[limited y cood]:15
+[/jump attack]:15
+[dash attack]:15
+[shakeable]:15
+[first speed]:15
+[last speed]:15
+[dash time]:15
+[dash ready time]:15
+[animation first index]:15
+[/dash attack]:15
+[counter attack]:15
+[probability]:15
+[damage type]:15
+[/counter attack]:15
+[human armor]:16
+[option]:16
+[targeting attacker]:17
+[death tower item]:17
+[/death tower item]:17
+[down]:18
+[plant]:18
+[HP MAX BOSS]:19
+[jumpattack motion]:21
+[jumpattack info]:21
+[change direction by target]:23
+[jump action]:23
+[MONSTER]:24
+[initial target Permanent]:24
+[ridableskill definition]:25
+[image path]:25
+[skill]:25
+[/ridableskill definition]:25
+[hold attack]:25
+[offset]:25
+[animation index]:25
+[min hold]:25
+[max hold]:25
+[/hold attack]:25
+[summon skill status up type]:26
+[attack down prob]:26
+[/attack down prob]:26
+[moveback action]:29
+[etc sound]:30
+[forced knockback]:31
+[superarmor on attack]:31
+[stuck resistance]:37
+[left]:37
+[monster title]:37
+[lugaru]:38
+[summon skill status up rate]:39
+[tau]:39
+[come in action]:40
+[/equipment]:42
+[right]:44
+[initial target]:44
+[/initial target]:44
+[with blast]:44
+[equipment]:46
+[base table]:47
+[subtitle]:47
+[function index]:50
+[on die]:50
+[jump motion]:59
+[is direction to move]:60
+[oneside move]:60
+[insect]:60
+[/targeting bonus]:61
+[ready action]:64
+[motion index]:64
+[effect ani file & layer index]:64
+[/ready action]:64
+[普通]:64
+[on attack]:67
+[normal]:68
+[/normal]:68
+[expert]:68
+[/expert]:68
+[/master]:68
+[king]:68
+[/king]:68
+[overhead gauge type]:69
+[master]:72
+[weapon break resistance]:72
+[PASSIVE]:76
+[dragon]:77
+[on appear]:77
+[ridableskill explanation]:80
+[/ridableskill explanation]:80
+[close-passive]:82
+[throw attack]:82
+[passive object number]:82
+[passive object filename]:82
+[object type]:82
+[passive object index]:82
+[power]:82
+[throw frame]:82
+[passive object start x cood]:82
+[passive object start y cood]:82
+[passive object start z cood]:82
+[attack number]:82
+[throw sound]:82
+[/throw attack]:82
+[spawn prob]:82
+[add gravity in aerial]:83
+[hp regen rate]:85
+[fix direction]:85
+[title]:88
+[detail]:88
+[spirit]:91
+[targeting low level]:97
+[atk super on scr]:100
+[/atk super on scr]:100
+[etc action]:101
+[/etc action]:101
+[jump speed]:102
+[jump power]:108
+[pattern]:110
+[targeting low HP]:112
+[PHYSICAL_ATTACK]:115
+[PHYSICAL_DEFENSE]:115
+[MAGICAL_ATTACK]:115
+[MAGICAL_DEFENSE]:115
+[on village]:117
+[targeting high level]:128
+[devil]:130
+[on hp]:132
+[close-manace]:136
+[event super on scr]:143
+[/event super on scr]:143
+[set damage check]:148
+[level of difficulty]:150
+[/level of difficulty]:150
+[/etc attack info]:154
+[on revenge]:154
+[etc attack info]:155
+[goblin]:156
+[fixture]:160
+[attack index]:162
+[targeting time term]:163
+[fort armor]:168
+[/action list]:185
+[undead]:188
+[stand]:190
+[dash]:190
+[machine]:190
+[light element]:204
+[action list]:206
+[beast]:210
+[targeting bonus]:216
+[hybrid]:220
+[range combat]:224
+[fire element]:226
+[unbreakable]:250
+[no element]:265
+[piercing resistance]:266
+[close-tough]:267
+[last action]:307
+[proc action]:311
+[water element]:317
+[dark element]:320
+[keep range distance with target]:353
+[targeting nearest]:358
+[speech on situation]:384
+[/speech on situation]:384
+[common champion elemental property]:417
+[/common champion elemental property]:417
+[MP regen speed]:442
+[attack sound]:460
+[intelligence]:498
+[ambient sound]:531
+[burn resistance]:545
+[etc motion]:553
+[/etc motion]:553
+[int data]:574
+[/int data]:574
+[bleeding resistance]:614
+[HP regen speed]:615
+[sit motion]:617
+[appear sound]:621
+[down motion]:631
+[lightning resistance]:632
+[item]:634
+[/item]:634
+[close-carefully]:635
+[overturn motion]:644
+[attack kind]:650
+[/attack kind]:650
+[attack motion]:652
+[/attack motion]:654
+[poison resistance]:689
+[confuse resistance]:695
+[sleep resistance]:699
+[attack delay]:713
+[move motion]:714
+[hold resistance]:717
+[slow resistance]:718
+[damage motion 2]:728
+[blind resistance]:740
+[waiting motion]:745
+[human]:745
+[stun resistance]:745
+[damage motion 1]:747
+[width]:748
+[stone resistance]:749
+[sight]:752
+[curse resistance]:796
+[down action]:797
+[dark resistance]:799
+[overturn action]:803
+[light resistance]:806
+[sit action]:814
+[melee combat]:849
+[fire resistance]:858
+[water resistance]:864
+[freeze resistance]:871
+[common champion drop item]:884
+[/common champion drop item]:884
+[ability table]:911
+[floating height]:922
+[damage action 2]:994
+[on etc]:1013
+[damage action 1]:1024
+[attack action]:1044
+[/attack action]:1064
+[die sound]:1067
+[damage sound]:1098
+[move action]:1138
+[destination change term]:1144
+[/medium]:1145
+[/hard]:1145
+[/ultimate]:1145
+[keep distance with target]:1147
+[/easy]:1155
+[lie frame]:1158
+[/hero]:1167
+[vision]:1167
+[waiting action]:1191
+[think term]:1243
+[ai pattern]:1273
+[/ai pattern]:1273
+[cooltime]:1278
+[/cooltime]:1278
+[medium]:1295
+[hard]:1295
+[ultimate]:1295
+[easy]:1304
+[hero]:1322
+[warlike]:1507
+[cast speed]:1521
+[die effect]:1546
+[stuckbonus on damage]:1700
+[EQUIPMENT_PHYSICAL_ATTACK]:1860
+[EQUIPMENT_MAGICAL_ATTACK]:1860
+[EQUIPMENT_PHYSICAL_DEFENSE]:1886
+[EQUIPMENT_MAGICAL_DEFENSE]:1887
+[attack info]:1888
+[/attack info]:1888
+[move speed]:1912
+[/category]:1932
+[face image]:1933
+[hit recovery]:1937
+[HP MAX]:1938
+[weight]:1938
+[name]:1938
+[ability category]:1939
+[/ability category]:1939
+[attack speed]:1939
+[level]:1940
+[category]:2020
