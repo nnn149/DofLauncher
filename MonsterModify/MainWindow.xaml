@@ -35,7 +35,9 @@
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="怪物名称" CanUserResize="True" CanUserSort="True" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="名称" CanUserResize="True" CanUserSort="True" Binding="{Binding Name.Value}" />
+                    <DataGridTextColumn Header="等级" CanUserResize="True" CanUserSort="True" Binding="{Binding Level.Value}" />
+                    <DataGridTextColumn Header="血量" CanUserResize="True" CanUserSort="True" Binding="{Binding HpMax.Value}" />
                     <DataGridTextColumn Header="路径" CanUserResize="True" CanUserSort="True" Binding="{Binding Path=Path}" />
                 </DataGrid.Columns>
             </DataGrid>

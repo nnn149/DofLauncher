@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -71,16 +72,8 @@ namespace MonsterModify
             for (var i = 0; i < res.Count; i++)
             {
                 var mStr = await PvfUtil.GetFileAsync(res[i].Groups[0].Value);
-                //GetAllTag(mStr);
-                var name = new Regex(@"name].*\n.*`(.+)`").Matches(mStr);
-                if (name.Count < 1)
-                {
-                    Debug.WriteLine("Regex processing empty" + i);
-                    continue;
-                }
-
-                var m = new Monster(name[0].Groups[1].Value, res[i].Groups[0].Value);
-                Monsters.Add(m);
+                var m = ProcessMonster(mStr, res[i].Groups[0].Value);
+                if (m != null) Monsters.Add(m);
             }
 
             // //排序输出所有标签
@@ -120,6 +113,42 @@ namespace MonsterModify
         //     }
         // }
 
+        private Monster ProcessMonster(string mStr, string path)
+        {
+            //GetAllTag(mStr);
+            var monster = new Monster(path);
+            //Debug.WriteLine($"path:{path}");
+            foreach (var propertyInfo in monster.GetType().GetProperties())
+            {
+                // 应为MonsterAttribute<>是泛型，所以运行时类型名不会是MonsterAttribute
+                if (!propertyInfo.PropertyType.Name.Contains("MonsterAttribute")) continue;
+
+
+                var ma = propertyInfo.GetValue(monster);
+                if (ma != null)
+                {
+                    var maType = ma.GetType();
+                    var index = (int) maType.GetProperty("ReplaceIndex")?.GetValue(ma);
+                    var pattern = (string) maType.GetProperty("Pattern")?.GetValue(ma);
+                    var matchCollection = new Regex(pattern ?? string.Empty).Matches(mStr);
+                    if (matchCollection.Count < 1) continue;
+
+                    var value = matchCollection[0].Groups[index].Value;
+
+                    //Debug.WriteLine($"name:{(string)maType.GetProperty("Name")?.GetValue(ma)}:{value} pattern:{pattern}");
+                    // C# 反射给对象赋值遇到的问题——类型转换 https://blog.csdn.net/xiaohan2826/article/details/8536074
+                    var property = ma.GetType().GetProperty("Value");
+                    if (property is not null)
+                        property.SetValue(ma, Convert.ChangeType(value, property.PropertyType), null);
+                }
+            }
+
+            if (String.IsNullOrEmpty(monster.Name.Value))
+            {
+                return null;
+            }
+            return monster;
+        }
 
         /* MainData
 0 好战
