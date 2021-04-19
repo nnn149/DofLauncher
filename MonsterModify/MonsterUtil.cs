@@ -41,23 +41,23 @@ namespace MonsterModify
             var strings = new Regex(RegexAllMonsterAttributes).Match(dataStr).Groups[2].Value.Trim().Replace("\r", "")
                 .Split('\n');
             for (var i = 0; i < 13; i++)
-                for (var j = 0; j < 5; j++)
-                    MainData[i, j] = double.Parse(strings[i * 5 + j]);
+            for (var j = 0; j < 5; j++)
+                MainData[i, j] = double.Parse(strings[i * 5 + j]);
 
             for (var i = 0; i < 26; i++)
-                for (var j = 0; j < 4; j++)
-                    _extraData[i, j] = double.Parse(strings[i * 4 + j + 65]);
+            for (var j = 0; j < 4; j++)
+                _extraData[i, j] = double.Parse(strings[i * 4 + j + 65]);
         }
 
         public async Task<bool> SaveTbl()
         {
             var str = "";
             for (var i = 0; i < MainData.GetLength(0); i++)
-                for (var j = 0; j < MainData.GetLength(1); j++)
-                    str += MainData[i, j].ToString("F2") + "\r\n";
+            for (var j = 0; j < MainData.GetLength(1); j++)
+                str += MainData[i, j].ToString("F2") + "\r\n";
             for (var i = 0; i < _extraData.GetLength(0); i++)
-                for (var j = 0; j < _extraData.GetLength(1); j++)
-                    str += _extraData[i, j].ToString("F2") + "\r\n";
+            for (var j = 0; j < _extraData.GetLength(1); j++)
+                str += _extraData[i, j].ToString("F2") + "\r\n";
             str = str.Substring(0, str.Length - 2);
             var data = Regex.Replace(dataStr, RegexAllMonsterAttributes,
                 m => m.Groups[1].Value + str + m.Groups[3].Value);
@@ -115,27 +115,44 @@ namespace MonsterModify
         //     }
         // }
 
+        public string json = File.ReadAllText("MonsterAttribute.json");
 
         private Monster ProcessMonster(string mStr, string path)
         {
             var monster = new Monster(path);
-            var json = File.ReadAllText("MonsterAttribute.json");
+            // var json = File.ReadAllText("MonsterAttribute.json");
             monster.MonsterAttributes = JsonConvert.DeserializeObject<Dictionary<string, MonsterAttribute>>(json);
             if (monster.MonsterAttributes != null)
+
                 foreach (var attribute in monster.MonsterAttributes)
                 {
                     var matchCollection = new Regex(attribute.Value.Pattern).Matches(mStr);
-                    if (matchCollection.Count < 1) continue;
+                    if (matchCollection.Count < 1)
+                    {
+                        monster.MonsterAttributes.Remove(attribute.Key);
+                        continue;
+                    }
+
                     attribute.Value.Value = matchCollection[0].Groups[attribute.Value.ReplaceIndex].Value;
                 }
             else
             {
                 return null;
             }
-            if (string.IsNullOrEmpty(monster.MonsterAttributes["name"].Value))
+
+            if (monster.MonsterAttributes.ContainsKey("name"))
+            {
+                if (string.IsNullOrEmpty(monster.MonsterAttributes["name"].Value))
+                {
+                    return null;
+                }
+            }
+            else
             {
                 return null;
             }
+
+
             return monster;
         }
 
