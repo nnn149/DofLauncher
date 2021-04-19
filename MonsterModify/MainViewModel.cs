@@ -15,6 +15,7 @@ using MonsterModify.Annotations;
 namespace MonsterModify
 {
     public class MainViewModel : ObservableObject
+
     {
         private int _allMonsterAttributeListIndex = -1;
         private double _normalMode;
@@ -24,6 +25,28 @@ namespace MonsterModify
         private double _unknownMode;
         private readonly MonsterUtil _monsterUtil = MonsterUtil.Instance;
         private ObservableCollection<Monster> _monsterList;
+        private Monster _selectMonster;
+        private int _selectMonsterIndex;
+
+        public int SelectMonsterIndex
+        {
+            get => _selectMonsterIndex;
+            set
+            {
+                _selectMonsterIndex = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Monster SelectMonster
+        {
+            get => _selectMonster;
+            set
+            {
+                _selectMonster = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<Monster> MonsterList
         {
@@ -109,6 +132,10 @@ namespace MonsterModify
 
         private async Task SaveAllMonsterAttributeAsync()
         {
+            // SelectMonster.Path = "qwerty";
+            // Debug.WriteLine(SelectMonster.Path);
+            // Debug.WriteLine(MonsterUtil.Instance.Monsters[SelectMonsterIndex].Name.Value);
+            
             _monsterUtil.MainData[AllMonsterAttributeListIndex, 0] = NormalMode;
             _monsterUtil.MainData[AllMonsterAttributeListIndex, 1] = AdventureMode;
             _monsterUtil.MainData[AllMonsterAttributeListIndex, 2] = KingMode;
@@ -122,8 +149,8 @@ namespace MonsterModify
 
         private async Task LoadAllMonstersAsync()
         {
-           await _monsterUtil.LoadMonsters();
-           MonsterList = new ObservableCollection<Monster>(_monsterUtil.Monsters);
+            await _monsterUtil.LoadMonsters();
+            MonsterList = new ObservableCollection<Monster>(_monsterUtil.Monsters);
         }
 
         private void UpdateMonsterAttribute()

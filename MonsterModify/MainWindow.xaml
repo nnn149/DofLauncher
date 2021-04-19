@@ -22,27 +22,6 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" />
 
-        <DockPanel Grid.Column="1" Grid.Row="1">
-            <TextBox HorizontalAlignment="Center" DockPanel.Dock="Top">所有怪物</TextBox>
-            <Button Command="{Binding LoadAllMonstersCommand}" DockPanel.Dock="Top">加载所有怪物</Button>
-
-            <DataGrid DockPanel.Dock="Bottom" IsReadOnly="True" AutoGenerateColumns="False"
-                      HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" SelectionUnit="Cell" SelectionMode="Single"
-                      ItemsSource="{Binding MonsterList}">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="Copy" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="名称" CanUserResize="True" CanUserSort="True" Binding="{Binding Name.Value}" />
-                    <DataGridTextColumn Header="等级" CanUserResize="True" CanUserSort="True" Binding="{Binding Level.Value}" />
-                    <DataGridTextColumn Header="血量" CanUserResize="True" CanUserSort="True" Binding="{Binding HpMax.Value}" />
-                    <DataGridTextColumn Header="路径" CanUserResize="True" CanUserSort="True" Binding="{Binding Path=Path}" />
-                </DataGrid.Columns>
-            </DataGrid>
-
-        </DockPanel>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
             <TextBox HorizontalAlignment="Center">全局怪物属性修改</TextBox>
             <ListBox SelectedIndex="{Binding AllMonsterAttributeListIndex}">
@@ -92,5 +71,40 @@
                 </Grid>
             </StackPanel>
         </StackPanel>
+
+        <DockPanel Grid.Column="1" Grid.Row="1">
+            <TextBox HorizontalAlignment="Center" DockPanel.Dock="Top">所有怪物</TextBox>
+            <Button Command="{Binding LoadAllMonstersCommand}" DockPanel.Dock="Top">加载所有怪物</Button>
+            <DataGrid Name="DgMain" DockPanel.Dock="Bottom" IsReadOnly="True" AutoGenerateColumns="False"
+                      HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"  SelectionMode="Single"
+                      SelectedItem="{Binding Path=SelectMonster,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,NotifyOnSourceUpdated=True}"
+                      SelectedIndex="{Binding SelectMonsterIndex}"
+                      ItemsSource="{Binding MonsterList}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="Copy" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="名称" CanUserResize="True" CanUserSort="True" Binding="{Binding Name.Value}" />
+                    <DataGridTextColumn Header="等级" CanUserResize="True" CanUserSort="True" Binding="{Binding Level.Value}" />
+                    <DataGridTextColumn Header="血量" CanUserResize="True" CanUserSort="True" Binding="{Binding HpMax.Value}" />
+                    <DataGridTextColumn Header="路径" CanUserResize="True" CanUserSort="True" Binding="{Binding Path=Path}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <DockPanel Grid.Row="1" Grid.Column="2">
+            <TextBlock Text="{Binding SelectMonster.Name.Value}" DockPanel.Dock="Top"></TextBlock>
+            <UniformGrid DockPanel.Dock="Bottom">
+                <DockPanel Height="30">
+                    <TextBlock VerticalAlignment="Center" DockPanel.Dock="Left">血量</TextBlock>
+                    <TextBox VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding SelectMonster.HpMax.Value}"></TextBox>
+                </DockPanel>
+
+
+            </UniformGrid>
+        </DockPanel>
+
     </Grid>
 </Window>
