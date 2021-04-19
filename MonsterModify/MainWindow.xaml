@@ -17,8 +17,8 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" />
 
@@ -76,7 +76,8 @@
             <TextBox HorizontalAlignment="Center" DockPanel.Dock="Top">所有怪物</TextBox>
             <Button Command="{Binding LoadAllMonstersCommand}" DockPanel.Dock="Top">加载所有怪物</Button>
             <DataGrid Name="DgMain" DockPanel.Dock="Bottom" IsReadOnly="True" AutoGenerateColumns="False"
-                      HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"  SelectionMode="Single"
+                      HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"
+                      SelectionMode="Single"
                       SelectedItem="{Binding Path=SelectMonster,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,NotifyOnSourceUpdated=True}"
                       SelectedIndex="{Binding SelectMonsterIndex}"
                       ItemsSource="{Binding MonsterList}">
@@ -86,24 +87,31 @@
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="名称" CanUserResize="True" CanUserSort="True" Binding="{Binding Name.Value}" />
-                    <DataGridTextColumn Header="等级" CanUserResize="True" CanUserSort="True" Binding="{Binding Level.Value}" />
-                    <DataGridTextColumn Header="血量" CanUserResize="True" CanUserSort="True" Binding="{Binding HpMax.Value}" />
-                    <DataGridTextColumn Header="路径" CanUserResize="True" CanUserSort="True" Binding="{Binding Path=Path}" />
+                    <DataGridTextColumn Header="名称" CanUserResize="True" CanUserSort="True"
+                                        Binding="{Binding MonsterAttributes[name].Value}" />
+                    <DataGridTextColumn Header="等级" CanUserResize="True" CanUserSort="True"
+                                        Binding="{Binding MonsterAttributes[level].Value}" />
+                    <DataGridTextColumn Header="血量" CanUserResize="True" CanUserSort="True"
+                                        Binding="{Binding MonsterAttributes[HP MAX].Value}" />
+                    <DataGridTextColumn Header="路径" CanUserResize="True" CanUserSort="True"
+                                        Binding="{Binding Path=Path}" />
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
 
         <DockPanel Grid.Row="1" Grid.Column="2">
-            <TextBlock Text="{Binding SelectMonster.Name.Value}" DockPanel.Dock="Top"></TextBlock>
-            <UniformGrid DockPanel.Dock="Bottom">
-                <DockPanel Height="30">
-                    <TextBlock VerticalAlignment="Center" DockPanel.Dock="Left">血量</TextBlock>
-                    <TextBox VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding SelectMonster.HpMax.Value}"></TextBox>
-                </DockPanel>
-
-
-            </UniformGrid>
+            <TextBlock Text="{Binding SelectMonster.MonsterAttributes[name].Value}" DockPanel.Dock="Top" />
+            <ListBox ItemsSource="{Binding SelectMonster.MonsterAttributes}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel Height="30">
+                            <TextBlock VerticalAlignment="Center" DockPanel.Dock="Left" Text="{Binding Value.Name }" />
+                            <TextBox VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Value.Value}" />
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <UniformGrid DockPanel.Dock="Bottom" />
         </DockPanel>
 
     </Grid>

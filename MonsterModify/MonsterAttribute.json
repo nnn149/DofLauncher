@@ -1,0 +1,217 @@
+﻿{
+  "name": {
+    "ReplaceIndex": 1,
+    "Pattern": "name].*\\n.*`(.+)`",
+    "Name": "名称"
+  },
+  "level": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[level\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "等级"
+  },
+  "HP MAX": {
+    "ReplaceIndex": 2,
+    "Pattern": "(.*`\\[HP MAX\\]`.*`\\*`\\t*)(.+?)([\\n|\\r\\n|\\t]+)",
+    "Name": "血量"
+  },
+  "EQUIPMENT_PHYSICAL_ATTACK": {
+    "ReplaceIndex": 2,
+    "Pattern": "(.*`\\[EQUIPMENT_PHYSICAL_ATTACK\\]`.*`\\*`,*[\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "物理攻击"
+  },
+  "EQUIPMENT_PHYSICAL_DEFENSE": {
+    "ReplaceIndex": 2,
+    "Pattern": "(.*`\\[EQUIPMENT_PHYSICAL_DEFENSE\\]`.*`\\*`,*[\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "物理防御"
+  },
+  "EQUIPMENT_MAGICAL_ATTACK": {
+    "ReplaceIndex": 2,
+    "Pattern": "(.*`\\[EQUIPMENT_MAGICAL_ATTACK\\]`.*`\\*`,*[\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "魔法攻击"
+  },
+  "EQUIPMENT_MAGICAL_DEFENSE": {
+    "ReplaceIndex": 2,
+    "Pattern": "(.*`\\[EQUIPMENT_MAGICAL_DEFENSE\\]`.*`\\*`,*[\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "魔法防御"
+  },
+  "dark resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[dark resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "暗属性抗性"
+  },
+  "light resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[light resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "光属性抗性"
+  },
+  "poison resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[poison resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "中毒抗性"
+  },
+  "curse resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[curse resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "诅咒抗性"
+  },
+  "fire resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[fire resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "火属性抗性"
+  },
+  "water resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[water resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "冰属性抗性"
+  },
+  "slow resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[slow resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "减速抗性"
+  },
+  "freeze resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[freeze resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "冰冻抗性"
+  },
+  "stun resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[stun resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "眩晕抗性"
+  },
+  "blind resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[blind resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "失明抗性"
+  },
+  "lightning resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[lightning resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "感电抗性"
+  },
+  "stone resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[stone resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "石化抗性"
+  },
+  "bleeding resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[bleeding resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "出血抗性"
+  },
+  "confuse resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[confuse resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "混乱抗性"
+  },
+  "hold resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[hold resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "持有?抗性"
+  },
+  "burn resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[burn resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "燃烧抗性"
+  },
+  "sleep resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[sleep resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "睡眠抗性"
+  },
+  "piercing resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[piercing resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "穿刺?抗性"
+  },
+  "stuck resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[stuck resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "困住?抗性"
+  },
+  "weapon break resistance": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[weapon break resistance\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "武器打破?抗性"
+  },
+  "HP regen speed": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[HP regen speed\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "血恢复速度"
+  },
+  "MP regen speed": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[MP regen speed\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "蓝恢复速度"
+  },
+  "move speed": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[move speed\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "移动速度"
+  },
+  "attack speed": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[attack speed\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "攻击速度"
+  },
+  "cast speed": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[cast speed\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "施法速度"
+  },
+  "jump speed": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[jump speed\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "跳跃速度"
+  },
+  "hit recovery": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[hit recovery\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "打击恢复?"
+  },
+  "jump power": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[jump power\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "跳跃高度"
+  },
+  "targeting time term": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[targeting time term\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "目标期限?"
+  },
+  "targeting nearest": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[targeting nearest\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "目标最近?"
+  },
+  "sight": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[sight\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "视力"
+  },
+  "attack delay": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[attack delay\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "攻击延迟"
+  },
+  "warlike": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[warlike\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "好战度"
+  },
+  "stuckbonus on damage": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[stuckbonus on damage\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "伤害加成"
+  },
+  "vision": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[vision\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "视野"
+  },
+  "superarmor on attack": {
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[superarmor on attack\\][\\n|\\r\\n|\\s]*)(.+?)([\\s]*[\\n|\\r\\n]+)",
+    "Name": "攻击时霸体"
+  }
+}

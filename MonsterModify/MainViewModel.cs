@@ -26,17 +26,7 @@ namespace MonsterModify
         private readonly MonsterUtil _monsterUtil = MonsterUtil.Instance;
         private ObservableCollection<Monster> _monsterList;
         private Monster _selectMonster;
-        private int _selectMonsterIndex;
-
-        public int SelectMonsterIndex
-        {
-            get => _selectMonsterIndex;
-            set
-            {
-                _selectMonsterIndex = value;
-                OnPropertyChanged();
-            }
-        }
+     
 
         public Monster SelectMonster
         {

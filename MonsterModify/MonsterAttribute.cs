@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonsterModify
 {
-    public class MonsterAttribute<T>
+    public class MonsterAttribute
     {
         /// <summary>
         /// 中文名
@@ -16,7 +16,7 @@ namespace MonsterModify
         /// <summary>
         /// 值
         /// </summary>
-        public T Value { get; set; }
+        public string Value { get; set; }
 
         /// <summary>
         /// 正则表达式
@@ -28,34 +28,10 @@ namespace MonsterModify
         /// </summary>
         public int ReplaceIndex { get; set; } = 2;
 
-        /// <summary>
-        /// mob文件中标签名
-        /// </summary>
-        public string Tag { get; set; }
 
         public MonsterAttribute()
         {
         }
-        public MonsterAttribute(string name,string tag)
-        {
-            Name = name;
-            Tag = tag;
-            Pattern = @$"(\[{tag}\][\n|\r\n|\s]*)(.+?)([\n|\r\n]+)";
-        }
-
-        public MonsterAttribute(string name, string pattern, string tag)
-        {
-            Name = name;
-            Pattern = pattern;
-            Tag = tag;
-        }
-
-        public MonsterAttribute(string name, string pattern, int replaceIndex, string tag)
-        {
-            Name = name;
-            Pattern = pattern;
-            ReplaceIndex = replaceIndex;
-            Tag = tag;
-        }
+        
     }
 }

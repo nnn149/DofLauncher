@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace MonsterModify
 {
@@ -39,23 +41,23 @@ namespace MonsterModify
             var strings = new Regex(RegexAllMonsterAttributes).Match(dataStr).Groups[2].Value.Trim().Replace("\r", "")
                 .Split('\n');
             for (var i = 0; i < 13; i++)
-            for (var j = 0; j < 5; j++)
-                MainData[i, j] = double.Parse(strings[i * 5 + j]);
+                for (var j = 0; j < 5; j++)
+                    MainData[i, j] = double.Parse(strings[i * 5 + j]);
 
             for (var i = 0; i < 26; i++)
-            for (var j = 0; j < 4; j++)
-                _extraData[i, j] = double.Parse(strings[i * 4 + j + 65]);
+                for (var j = 0; j < 4; j++)
+                    _extraData[i, j] = double.Parse(strings[i * 4 + j + 65]);
         }
 
         public async Task<bool> SaveTbl()
         {
             var str = "";
             for (var i = 0; i < MainData.GetLength(0); i++)
-            for (var j = 0; j < MainData.GetLength(1); j++)
-                str += MainData[i, j].ToString("F2") + "\r\n";
+                for (var j = 0; j < MainData.GetLength(1); j++)
+                    str += MainData[i, j].ToString("F2") + "\r\n";
             for (var i = 0; i < _extraData.GetLength(0); i++)
-            for (var j = 0; j < _extraData.GetLength(1); j++)
-                str += _extraData[i, j].ToString("F2") + "\r\n";
+                for (var j = 0; j < _extraData.GetLength(1); j++)
+                    str += _extraData[i, j].ToString("F2") + "\r\n";
             str = str.Substring(0, str.Length - 2);
             var data = Regex.Replace(dataStr, RegexAllMonsterAttributes,
                 m => m.Groups[1].Value + str + m.Groups[3].Value);
@@ -113,37 +115,24 @@ namespace MonsterModify
         //     }
         // }
 
+
         private Monster ProcessMonster(string mStr, string path)
         {
-            //GetAllTag(mStr);
             var monster = new Monster(path);
-            //Debug.WriteLine($"path:{path}");
-            foreach (var propertyInfo in monster.GetType().GetProperties())
-            {
-                // 应为MonsterAttribute<>是泛型，所以运行时类型名不会是MonsterAttribute
-                if (!propertyInfo.PropertyType.Name.Contains("MonsterAttribute")) continue;
-
-
-                var ma = propertyInfo.GetValue(monster);
-                if (ma != null)
+            var json = File.ReadAllText("MonsterAttribute.json");
+            monster.MonsterAttributes = JsonConvert.DeserializeObject<Dictionary<string, MonsterAttribute>>(json);
+            if (monster.MonsterAttributes != null)
+                foreach (var attribute in monster.MonsterAttributes)
                 {
-                    var maType = ma.GetType();
-                    var index = (int) maType.GetProperty("ReplaceIndex")?.GetValue(ma);
-                    var pattern = (string) maType.GetProperty("Pattern")?.GetValue(ma);
-                    var matchCollection = new Regex(pattern ?? string.Empty).Matches(mStr);
+                    var matchCollection = new Regex(attribute.Value.Pattern).Matches(mStr);
                     if (matchCollection.Count < 1) continue;
-
-                    var value = matchCollection[0].Groups[index].Value;
-
-                    //Debug.WriteLine($"name:{(string)maType.GetProperty("Name")?.GetValue(ma)}:{value} pattern:{pattern}");
-                    // C# 反射给对象赋值遇到的问题——类型转换 https://blog.csdn.net/xiaohan2826/article/details/8536074
-                    var property = ma.GetType().GetProperty("Value");
-                    if (property is not null)
-                        property.SetValue(ma, Convert.ChangeType(value, property.PropertyType), null);
+                    attribute.Value.Value = matchCollection[0].Groups[attribute.Value.ReplaceIndex].Value;
                 }
+            else
+            {
+                return null;
             }
-
-            if (String.IsNullOrEmpty(monster.Name.Value))
+            if (string.IsNullOrEmpty(monster.MonsterAttributes["name"].Value))
             {
                 return null;
             }
