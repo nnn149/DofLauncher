@@ -1,22 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 
-namespace MonsterModify
+namespace MonsterModify.Model
 {
-    public class MonsterAttribute
+    public class MonsterAttribute:ObservableObject
     {
+        private string _name;
+        private string _value;
+
         /// <summary>
         /// 中文名
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set { _name = value;OnPropertyChanged(); }
+        }
 
         /// <summary>
         /// 值
         /// </summary>
-        public string Value { get; set; }
+        public string Value
+        {
+            get => _value;
+            set { _value = value;OnPropertyChanged(); }
+        }
 
         /// <summary>
         /// 正则表达式

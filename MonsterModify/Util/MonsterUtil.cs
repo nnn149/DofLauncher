@@ -1,43 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MonsterModify.Model;
 using Newtonsoft.Json;
 
-namespace MonsterModify
+namespace MonsterModify.Util
 {
     public sealed class MonsterUtil
     {
-        private static readonly Lazy<MonsterUtil> Lazy = new(() => new MonsterUtil());
-        private static readonly IPvfUtil PvfUtil = new PvfUtilityUtil();
-        public static MonsterUtil Instance => Lazy.Value;
-
-        private MonsterUtil()
-        {
-            Init();
-            Debug.WriteLine("MonsterUtil Init！");
-        }
-
         private static readonly string RegexAllMonsterAttributes = @"(PVF_File[\n|\r\n]*)([\s\S]*?)([\n|\r\n]*\[)";
         private static readonly string TblPath = "monster/monsterapcdifficultybonus.tbl";
+        private static readonly string MonsterAttributeJson = File.ReadAllText("MonsterAttribute.json");
+        private readonly IPvfUtil _pvfUtil;
 
-        private string dataStr;
-        public double[,] MainData = new double[13, 5];
-        private double[,] _extraData = new double[26, 4];
-        public List<Monster> Monsters;
+        public double[,] MainData { get; set; } = new double[13, 5];
+        private readonly double[,] _extraData = new double[26, 4];
+        public List<Monster> Monsters { get; set; }
 
+        public MonsterUtil(string ip, string port)
 
-        public async void Init()
         {
-            if (!string.IsNullOrEmpty(dataStr)) return;
+            _pvfUtil = new PvfUtilityUtil(ip, port);
+            Debug.WriteLine("MonsterUtil LoadTbl！");
+        }
 
-            dataStr = await PvfUtil.GetFileAsync(TblPath);
+        public async Task LoadTbl()
+        {
+            var dataStr = await _pvfUtil.GetFileAsync(TblPath);
             var strings = new Regex(RegexAllMonsterAttributes).Match(dataStr).Groups[2].Value.Trim().Replace("\r", "")
                 .Split('\n');
             for (var i = 0; i < 13; i++)
@@ -51,6 +42,7 @@ namespace MonsterModify
 
         public async Task<bool> SaveTbl()
         {
+            var dataStr = await _pvfUtil.GetFileAsync(TblPath);
             var str = "";
             for (var i = 0; i < MainData.GetLength(0); i++)
             for (var j = 0; j < MainData.GetLength(1); j++)
@@ -58,70 +50,34 @@ namespace MonsterModify
             for (var i = 0; i < _extraData.GetLength(0); i++)
             for (var j = 0; j < _extraData.GetLength(1); j++)
                 str += _extraData[i, j].ToString("F2") + "\r\n";
-            str = str.Substring(0, str.Length - 2);
+            str = str[..^2];
             var data = Regex.Replace(dataStr, RegexAllMonsterAttributes,
                 m => m.Groups[1].Value + str + m.Groups[3].Value);
-            if (await PvfUtil.SaveFileAsync(TblPath, data)) return true;
+            if (await _pvfUtil.SaveFileAsync(TblPath, data)) return true;
             return false;
         }
 
-        public async Task LoadMonsters()
+        public async Task LoadAllMonsters()
         {
-            var pathStr = await PvfUtil.GetFileListAsync("monster");
-
+            var pathStr = await _pvfUtil.GetFileListAsync("monster");
             var res = new Regex(".*mob").Matches(pathStr);
             Monsters = new List<Monster>(res.Count);
             for (var i = 0; i < res.Count; i++)
             {
-                var mStr = await PvfUtil.GetFileAsync(res[i].Groups[0].Value);
-                var m = ProcessMonster(mStr, res[i].Groups[0].Value);
+                var m = await LoadOneMonster(res[i].Groups[0].Value);
                 if (m != null) Monsters.Add(m);
             }
-
-            // //排序输出所有标签
-            // var labs = labDictionary.OrderBy(v => v.Value);
-            // foreach (var lab in labs)
-            // {
-            //     Debug.WriteLine($"{lab.Key}:{lab.Value}");
-            // }
         }
 
-        // private static Dictionary<string, int> labDictionary = new();
-        //
-        // private void GetAllTag(string mStr)
-        // {
-        //     try
-        //     {
-        //         var labs = new Regex(@"\[(.*?)\]").Matches(mStr);
-        //
-        //         foreach (Match match in labs)
-        //         {
-        //             int count=0;
-        //             if (labDictionary.TryGetValue(match.Value,out count))
-        //             {
-        //                 labDictionary[match.Value]++;
-        //             }
-        //             else
-        //             {
-        //                 labDictionary.Add(match.Value, 1);
-        //             }
-        //
-        //         }
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e);
-        //         throw;
-        //     }
-        // }
 
-        public string json = File.ReadAllText("MonsterAttribute.json");
-
-        private Monster ProcessMonster(string mStr, string path)
+        public async Task<Monster> LoadOneMonster(string path)
         {
-            var monster = new Monster(path);
-            // var json = File.ReadAllText("MonsterAttribute.json");
-            monster.MonsterAttributes = JsonConvert.DeserializeObject<Dictionary<string, MonsterAttribute>>(json);
+            var mStr = await _pvfUtil.GetFileAsync(path);
+            var monster = new Monster(path)
+            {
+                MonsterAttributes =
+                    JsonConvert.DeserializeObject<Dictionary<string, MonsterAttribute>>(MonsterAttributeJson)
+            };
             if (monster.MonsterAttributes != null)
 
                 foreach (var attribute in monster.MonsterAttributes)
@@ -147,23 +103,18 @@ namespace MonsterModify
                 return null;
             }
 
-
             return monster;
         }
 
         public async Task<bool> SaveMonster(Monster monster)
         {
-            var data = await PvfUtil.GetFileAsync(monster.Path);
+            var data = await _pvfUtil.GetFileAsync(monster.Path);
             if (!string.IsNullOrEmpty(data))
             {
                 foreach (var attribute in monster.MonsterAttributes)
-                {
                     if (new Regex(attribute.Value.Pattern).Matches(data).Count < 1)
-                    {
                         continue;
-                    }
                     else
-                    {
                         data = Regex.Replace(data, attribute.Value.Pattern, m =>
                         {
                             var str = "";
@@ -175,32 +126,11 @@ namespace MonsterModify
 
                             return str;
                         });
-                    }
-                }
 
-                if (await PvfUtil.SaveFileAsync(monster.Path, data))
-                {
-                    return true;
-                }
+                if (await _pvfUtil.SaveFileAsync(monster.Path, data)) return true;
             }
 
             return false;
         }
-
-        /* MainData
-0 好战
-1 视野
-2 命中增加
-3 回避增加
-4 怪物血量倍率
-5 攻击动作速度
-6 移动速度增加
-7 异常状态抵抗
-8 伤害增加
-9 防御增加 （这2个数据 应该有差别 和普通攻击防御）
-10 硬直抵抗
-11 无视防御的攻击
-12 无视攻击的防御
- */
     }
 }

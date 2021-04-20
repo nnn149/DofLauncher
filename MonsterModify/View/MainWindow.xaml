@@ -1,34 +1,38 @@
-﻿<Window x:Class="MonsterModify.MainWindow"
+﻿<Window x:Class="MonsterModify.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MonsterModify"
+        xmlns:viewModel="clr-namespace:MonsterModify.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="800">
+        Title="MainWindow" Height="500" Width="1200">
     <Window.DataContext>
-        <local:MainViewModel />
+        <viewModel:MainViewModel />
     </Window.DataContext>
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" />
+        <WrapPanel Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" >
+            <TextBlock >IP:</TextBlock>
+            <TextBox Text="{Binding Ip}"></TextBox>
+            <TextBlock>端口:</TextBlock>
+            <TextBox Text="{Binding Port}"></TextBox>
+            <Button Command="{Binding LoadAllMonsterAttributeCommand}" >加载全局怪物属性</Button>
+            <Button Command="{Binding LoadAllMonstersCommand}" >加载所有怪物列表</Button>
+        </WrapPanel>
 
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
-            <TextBlock HorizontalAlignment="Center">全局怪物属性修改</TextBlock>
-            <Button Command="{Binding SaveAllMonsterAttributeCommand}" Grid.Row="5" Grid.ColumnSpan="2"
-                    Grid.Column="0">
-                保存全局属性
-            </Button>
+            <TextBlock HorizontalAlignment="Left">全局怪物属性</TextBlock>
             <ListBox SelectedIndex="{Binding AllMonsterAttributeListIndex}">
                 <ListBoxItem>好战</ListBoxItem>
                 <ListBoxItem>视野</ListBoxItem>
@@ -71,22 +75,26 @@
                     <TextBox Text="{Binding UnknownMode}" Grid.Row="4" Grid.Column="1" />
         
                 </Grid>
+                <Button Command="{Binding SaveAllMonsterAttributeCommand}" Grid.Row="5" Grid.ColumnSpan="2"
+                        Grid.Column="0">
+                    保当前修改
+                </Button>
             </StackPanel>
         </StackPanel>
 
         <DockPanel Grid.Column="1" Grid.Row="1">
-            <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top">所有怪列表物</TextBlock>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">按名称过滤：</TextBlock>
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"  HorizontalAlignment="Left">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">按怪物名称过滤：</TextBlock>
                 <TextBox MinWidth="50" Text="{Binding SearchName ,UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <Button Command="{Binding LoadAllMonstersCommand}" >加载所有怪物</Button>
             </StackPanel>
 
             <DataGrid Name="DgMain" DockPanel.Dock="Bottom" IsReadOnly="True" AutoGenerateColumns="False"
                       HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"
                       SelectionMode="Single"
+                      ItemsSource="{Binding MonsterList,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,NotifyOnSourceUpdated=True}"
                       SelectedItem="{Binding Path=SelectMonster,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,NotifyOnSourceUpdated=True}"
-                      ItemsSource="{Binding MonsterList}">
+                     >
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Command="Copy" />
@@ -104,21 +112,24 @@
         </DockPanel>
 
         <DockPanel Grid.Row="1" Grid.Column="2">
-            <TextBlock HorizontalAlignment="Center" Text="选中怪物属性修改" DockPanel.Dock="Top" />
-            <Button DockPanel.Dock="Top" Command="{Binding SaveMonsterAttributeCommand}">保存当前属性</Button>
+            <TextBlock HorizontalAlignment="Left" Text="选中怪物属性" DockPanel.Dock="Top" />
+            <WrapPanel DockPanel.Dock="Top">
+                <Button DockPanel.Dock="Top" Command="{Binding SaveMonsterAttributeCommand}">保存当前怪物</Button>
+                <Button DockPanel.Dock="Top" Command="{Binding LoadOneMonstersCommand}">重读当前怪物</Button>
+            </WrapPanel>
             <ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding SelectMonster.MonsterAttributes}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel Height="30">
-                            <TextBlock VerticalAlignment="Center" DockPanel.Dock="Left" Text="{Binding Value.Name }" />
+                            <TextBlock ToolTip="{Binding Key }"  VerticalAlignment="Center" DockPanel.Dock="Left" Text="{Binding Value.Name }" />
                             <TextBox VerticalAlignment="Center" DockPanel.Dock="Left" Text="{Binding Value.Value}" />
-                            <GridSplitter Width="3"></GridSplitter>
-                            <TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Key }" />
                         </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-          
+        </DockPanel>
+        <DockPanel Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
+            <ProgressBar></ProgressBar>
         </DockPanel>
 
     </Grid>

@@ -1,34 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-using MonsterModify.Annotations;
+using Microsoft.Toolkit.Mvvm.Messaging;
+using MonsterModify.Model;
+using MonsterModify.Util;
 
-namespace MonsterModify
+namespace MonsterModify.ViewModel
 {
     public class MainViewModel : ObservableObject
 
     {
+        #region field
+
         private int _allMonsterAttributeListIndex = -1;
         private double _normalMode;
         private double _adventureMode;
         private double _kingMode;
         private double _hellMode;
         private double _unknownMode;
-        private readonly MonsterUtil _monsterUtil = MonsterUtil.Instance;
+        private MonsterUtil _monsterUtil;
         private ObservableCollection<Monster> _monsterList;
         private Monster _selectMonster;
         private ICollectionView _listCollectionView;
         private string _searchName;
+
+        #endregion
+
+        #region prop
+
+        public string Ip { get; set; }
+        public string Port { get; set; }
 
         public ICollectionView ListCollectionView
         {
@@ -45,11 +49,9 @@ namespace MonsterModify
             get => _searchName;
             set
             {
-                _searchName = value;OnPropertyChanged();
-                if (_listCollectionView != null)
-                {
-                    _listCollectionView.Refresh();
-                }
+                _searchName = value;
+                OnPropertyChanged();
+                if (_listCollectionView != null) _listCollectionView.Refresh();
             }
         }
 
@@ -68,7 +70,6 @@ namespace MonsterModify
             get => _monsterList;
             set
             {
-                
                 _monsterList = value;
                 OnPropertyChanged();
             }
@@ -131,45 +132,57 @@ namespace MonsterModify
             {
                 _allMonsterAttributeListIndex = value;
                 OnPropertyChanged();
-                // new Task(async () => { await UpdateMonsterAttribute(); }
-                // ).Start();
                 UpdateMonsterAttribute();
             }
         }
 
-        public IAsyncRelayCommand SaveAllMonsterAttributeCommand { get; set; }
+        public IAsyncRelayCommand LoadOneMonstersCommand { get; set; }
         public IAsyncRelayCommand LoadAllMonstersCommand { get; set; }
+        public IAsyncRelayCommand LoadAllMonsterAttributeCommand { get; set; }
         public IAsyncRelayCommand SaveMonsterAttributeCommand { get; set; }
+        public IAsyncRelayCommand SaveAllMonsterAttributeCommand { get; set; }
 
+        #endregion
 
         public MainViewModel()
         {
-            SaveAllMonsterAttributeCommand = new AsyncRelayCommand(SaveAllMonsterAttributeAsync);
-            LoadAllMonstersCommand = new AsyncRelayCommand(LoadAllMonstersAsync);
+            Ip = "127.0.0.1";
+            Port = "27000";
+            LoadOneMonstersCommand = new AsyncRelayCommand(LoadOneMonsters);
+            LoadAllMonstersCommand = new AsyncRelayCommand(LoadAllMonsters);
+            LoadAllMonsterAttributeCommand = new AsyncRelayCommand(LoadAllMonsterAttribute);
             SaveMonsterAttributeCommand = new AsyncRelayCommand(SaveMonsterAttribute);
+            SaveAllMonsterAttributeCommand = new AsyncRelayCommand(SaveAllMonsterAttributeAsync);
+        }
 
+        private void Init()
+        {
+            if (_monsterUtil == null)
+            {
+                _monsterUtil = new MonsterUtil(Ip, Port);
+            }
         }
 
         private async Task SaveAllMonsterAttributeAsync()
         {
-            // SelectMonster.Path = "qwerty";
-            // Debug.WriteLine(SelectMonster.Path);
-            // Debug.WriteLine(MonsterUtil.Instance.Monsters[SelectMonsterIndex].Name.Value);
-            
-            _monsterUtil.MainData[AllMonsterAttributeListIndex, 0] = NormalMode;
-            _monsterUtil.MainData[AllMonsterAttributeListIndex, 1] = AdventureMode;
-            _monsterUtil.MainData[AllMonsterAttributeListIndex, 2] = KingMode;
-            _monsterUtil.MainData[AllMonsterAttributeListIndex, 3] = HellMode;
-            _monsterUtil.MainData[AllMonsterAttributeListIndex, 4] = UnknownMode;
-            if (await _monsterUtil.SaveTbl())
-                MessageBox.Show("保存成功");
-            else
-                MessageBox.Show("保存失败");
+            if (_monsterUtil != null)
+            {
+                _monsterUtil.MainData[AllMonsterAttributeListIndex, 0] = NormalMode;
+                _monsterUtil.MainData[AllMonsterAttributeListIndex, 1] = AdventureMode;
+                _monsterUtil.MainData[AllMonsterAttributeListIndex, 2] = KingMode;
+                _monsterUtil.MainData[AllMonsterAttributeListIndex, 3] = HellMode;
+                _monsterUtil.MainData[AllMonsterAttributeListIndex, 4] = UnknownMode;
+                if (await _monsterUtil.SaveTbl())
+                    WeakReferenceMessenger.Default.Send("保存成功", "MessageBox");
+                else
+                    WeakReferenceMessenger.Default.Send("保存失败", "MessageBox");
+            }
         }
 
-        private async Task LoadAllMonstersAsync()
+        private async Task LoadAllMonsters()
         {
-            await _monsterUtil.LoadMonsters();
+            Init();
+            await _monsterUtil.LoadAllMonsters();
             MonsterList = new ObservableCollection<Monster>(_monsterUtil.Monsters);
             ListCollectionView = CollectionViewSource.GetDefaultView(MonsterList);
             ListCollectionView.Filter = FilterTask;
@@ -177,15 +190,40 @@ namespace MonsterModify
 
         private void UpdateMonsterAttribute()
         {
-            NormalMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 0];
-            AdventureMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 1];
-            KingMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 2];
-            HellMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 3];
-            UnknownMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 4];
+            if (_monsterUtil != null)
+            {
+                NormalMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 0];
+                AdventureMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 1];
+                KingMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 2];
+                HellMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 3];
+                UnknownMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 4];
+            }
         }
+
+
         private async Task SaveMonsterAttribute()
         {
-            await _monsterUtil.SaveMonster(SelectMonster);
+            if (_monsterUtil != null && SelectMonster != null)
+            {
+                if (await _monsterUtil.SaveMonster(SelectMonster))
+                    WeakReferenceMessenger.Default.Send("保存成功", "MessageBox");
+                else
+                    WeakReferenceMessenger.Default.Send("保存失败", "MessageBox");
+            }
+        }
+
+        private async Task LoadOneMonsters()
+        {
+            if (_monsterUtil != null && SelectMonster != null)
+                SelectMonster.MonsterAttributes =
+                    (await _monsterUtil.LoadOneMonster(SelectMonster.Path)).MonsterAttributes;
+        }
+
+        private async Task LoadAllMonsterAttribute()
+        {
+            Init();
+            await _monsterUtil.LoadTbl();
+            AllMonsterAttributeListIndex = 0;
         }
 
         public bool FilterTask(object value)
@@ -193,11 +231,11 @@ namespace MonsterModify
             if (value is Monster entry)
             {
                 if (!string.IsNullOrEmpty(SearchName))
-                {
                     return entry.MonsterAttributes["name"].Value.Contains(SearchName);
-                }
+
                 return true;
             }
+
             return false;
         }
     }
