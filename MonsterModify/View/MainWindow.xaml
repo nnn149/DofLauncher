@@ -15,7 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="20" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
@@ -87,6 +87,8 @@
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"  HorizontalAlignment="Left">
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">按怪物名称过滤：</TextBlock>
                 <TextBox MinWidth="50" Text="{Binding SearchName ,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBlock HorizontalAlignment="Right">怪物总数:</TextBlock>
+                <TextBlock Text="{Binding MonsterList.Count}"></TextBlock>
             </StackPanel>
 
             <DataGrid Name="DgMain" DockPanel.Dock="Bottom" IsReadOnly="True" AutoGenerateColumns="False"
@@ -129,7 +131,8 @@
             </ListBox>
         </DockPanel>
         <DockPanel Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
-            <ProgressBar></ProgressBar>
+            <ProgressBar Value="{Binding CurrentProgress}"></ProgressBar>
+
         </DockPanel>
 
     </Grid>

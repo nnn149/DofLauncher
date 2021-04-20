@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -26,6 +27,7 @@ namespace MonsterModify.ViewModel
         private Monster _selectMonster;
         private ICollectionView _listCollectionView;
         private string _searchName;
+        private int _currentProgress;
 
         #endregion
 
@@ -33,6 +35,12 @@ namespace MonsterModify.ViewModel
 
         public string Ip { get; set; }
         public string Port { get; set; }
+
+        public int CurrentProgress
+        {
+            get => _currentProgress;
+            set { _currentProgress = value; OnPropertyChanged(); }
+        }
 
         public ICollectionView ListCollectionView
         {
@@ -182,7 +190,8 @@ namespace MonsterModify.ViewModel
         private async Task LoadAllMonsters()
         {
             Init();
-            await _monsterUtil.LoadAllMonsters();
+            var progressIndicator = new Progress<int>(v => CurrentProgress = v);
+            await _monsterUtil.LoadAllMonsters(progressIndicator);
             MonsterList = new ObservableCollection<Monster>(_monsterUtil.Monsters);
             ListCollectionView = CollectionViewSource.GetDefaultView(MonsterList);
             ListCollectionView.Filter = FilterTask;

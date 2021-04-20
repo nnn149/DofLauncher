@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -57,16 +58,26 @@ namespace MonsterModify.Util
             return false;
         }
 
-        public async Task LoadAllMonsters()
+        public async Task LoadAllMonsters(IProgress<int> progress)
         {
             var pathStr = await _pvfUtil.GetFileListAsync("monster");
             var res = new Regex(".*mob").Matches(pathStr);
-            Monsters = new List<Monster>(res.Count);
-            for (var i = 0; i < res.Count; i++)
+            var totalCount = res.Count;
+            int tempCount = 0;
+            Monsters = new List<Monster>(totalCount);
+            for (var i = 0; i < totalCount; i++)
             {
                 var m = await LoadOneMonster(res[i].Groups[0].Value);
                 if (m != null) Monsters.Add(m);
+                if (progress != null)
+                {
+                    progress.Report((tempCount * 100 / totalCount));
+
+                }
+                tempCount++;
             }
+
+            if (progress != null) progress.Report(100);
         }
 
 
