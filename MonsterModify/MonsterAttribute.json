@@ -1,7 +1,7 @@
 ﻿{
   "name": {
-    "ReplaceIndex": 1,
-    "Pattern": "name].*\\n.*`(.+)`",
+    "ReplaceIndex": 2,
+    "Pattern": "(\\[name\\].*\\n.*`)(.+)(`.*[\\s]*[\\n|\\r\\n]+)",
     "Name": "名称"
   },
   "level": {

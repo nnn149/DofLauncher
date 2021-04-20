@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using MonsterModify.Model;
 using Newtonsoft.Json;
 
@@ -14,6 +15,7 @@ namespace MonsterModify.Util
         private static readonly string RegexAllMonsterAttributes = @"(PVF_File[\n|\r\n]*)([\s\S]*?)([\n|\r\n]*\[)";
         private static readonly string TblPath = "monster/monsterapcdifficultybonus.tbl";
         private static readonly string MonsterAttributeJson = File.ReadAllText("MonsterAttribute.json");
+        private static readonly string MonsterLst = "monster/monster.lst";
         private readonly IPvfUtil _pvfUtil;
 
         public double[,] MainData { get; set; } = new double[13, 5];
@@ -33,12 +35,12 @@ namespace MonsterModify.Util
             var strings = new Regex(RegexAllMonsterAttributes).Match(dataStr).Groups[2].Value.Trim().Replace("\r", "")
                 .Split('\n');
             for (var i = 0; i < 13; i++)
-            for (var j = 0; j < 5; j++)
-                MainData[i, j] = double.Parse(strings[i * 5 + j]);
+                for (var j = 0; j < 5; j++)
+                    MainData[i, j] = double.Parse(strings[i * 5 + j]);
 
             for (var i = 0; i < 26; i++)
-            for (var j = 0; j < 4; j++)
-                _extraData[i, j] = double.Parse(strings[i * 4 + j + 65]);
+                for (var j = 0; j < 4; j++)
+                    _extraData[i, j] = double.Parse(strings[i * 4 + j + 65]);
         }
 
         public async Task<bool> SaveTbl()
@@ -46,11 +48,11 @@ namespace MonsterModify.Util
             var dataStr = await _pvfUtil.GetFileAsync(TblPath);
             var str = "";
             for (var i = 0; i < MainData.GetLength(0); i++)
-            for (var j = 0; j < MainData.GetLength(1); j++)
-                str += MainData[i, j].ToString("F2") + "\r\n";
+                for (var j = 0; j < MainData.GetLength(1); j++)
+                    str += MainData[i, j].ToString("F2") + "\r\n";
             for (var i = 0; i < _extraData.GetLength(0); i++)
-            for (var j = 0; j < _extraData.GetLength(1); j++)
-                str += _extraData[i, j].ToString("F2") + "\r\n";
+                for (var j = 0; j < _extraData.GetLength(1); j++)
+                    str += _extraData[i, j].ToString("F2") + "\r\n";
             str = str[..^2];
             var data = Regex.Replace(dataStr, RegexAllMonsterAttributes,
                 m => m.Groups[1].Value + str + m.Groups[3].Value);
@@ -60,20 +62,24 @@ namespace MonsterModify.Util
 
         public async Task LoadAllMonsters(IProgress<int> progress)
         {
-            var pathStr = await _pvfUtil.GetFileListAsync("monster");
-            var res = new Regex(".*mob").Matches(pathStr);
-            var totalCount = res.Count;
+            var monsterLst = (await _pvfUtil.GetFileAsync(MonsterLst)).Replace("#PVF_File", "").Replace("`", "")
+                .Replace("\r", "").Trim();
+            var ms = monsterLst.Split('\n');
+            var totalCount = ms.Length / 2;
             int tempCount = 0;
             Monsters = new List<Monster>(totalCount);
-            for (var i = 0; i < totalCount; i++)
+            for (var i = 0; i < ms.Length - 2; i += 2)
             {
-                var m = await LoadOneMonster(res[i].Groups[0].Value);
-                if (m != null) Monsters.Add(m);
+                var m = await LoadOneMonster(Convert.ToInt32(ms[i]), "monster/" + ms[i + 1]);
+                if (m != null)
+                {
+                    Monsters.Add(m);
+                }
                 if (progress != null)
                 {
                     progress.Report((tempCount * 100 / totalCount));
-
                 }
+
                 tempCount++;
             }
 
@@ -81,10 +87,10 @@ namespace MonsterModify.Util
         }
 
 
-        public async Task<Monster> LoadOneMonster(string path)
+        public async Task<Monster> LoadOneMonster(int index, string path)
         {
             var mStr = await _pvfUtil.GetFileAsync(path);
-            var monster = new Monster(path)
+            var monster = new Monster(index, path)
             {
                 MonsterAttributes =
                     JsonConvert.DeserializeObject<Dictionary<string, MonsterAttribute>>(MonsterAttributeJson)
@@ -137,7 +143,7 @@ namespace MonsterModify.Util
 
                             return str;
                         });
-
+                Clipboard.SetDataObject(data, true);
                 if (await _pvfUtil.SaveFileAsync(monster.Path, data)) return true;
             }
 

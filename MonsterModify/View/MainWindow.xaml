@@ -103,6 +103,8 @@
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>
+                    <DataGridTextColumn Header="编号" CanUserResize="True" CanUserSort="True"
+                                        Binding="{Binding Index}" />
                     <DataGridTextColumn Header="名称" CanUserResize="True" CanUserSort="True"
                                         Binding="{Binding MonsterAttributes[name].Value}" />
                     <DataGridTextColumn Header="等级" CanUserResize="True" CanUserSort="True"

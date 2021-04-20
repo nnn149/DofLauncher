@@ -225,7 +225,7 @@ namespace MonsterModify.ViewModel
         {
             if (_monsterUtil != null && SelectMonster != null)
                 SelectMonster.MonsterAttributes =
-                    (await _monsterUtil.LoadOneMonster(SelectMonster.Path)).MonsterAttributes;
+                    (await _monsterUtil.LoadOneMonster(SelectMonster.Index, SelectMonster.Path)).MonsterAttributes;
         }
 
         private async Task LoadAllMonsterAttribute()

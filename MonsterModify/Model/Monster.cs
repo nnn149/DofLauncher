@@ -6,6 +6,7 @@ namespace MonsterModify.Model
     public class Monster: ObservableObject
     {
         private Dictionary<string, MonsterAttribute> _monsterAttributes;
+        public int Index { get; set; }
         public string Path { get; set; }
 
         public Dictionary<string, MonsterAttribute> MonsterAttributes
@@ -20,6 +21,11 @@ namespace MonsterModify.Model
 
         }
 
+        public Monster(int index, string path)
+        {
+            Index = index;
+            Path = path;
+        }
 
         public Monster(string path)
         {
