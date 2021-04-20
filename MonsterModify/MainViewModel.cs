@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using MonsterModify.Annotations;
@@ -26,7 +27,31 @@ namespace MonsterModify
         private readonly MonsterUtil _monsterUtil = MonsterUtil.Instance;
         private ObservableCollection<Monster> _monsterList;
         private Monster _selectMonster;
-     
+        private ICollectionView _listCollectionView;
+        private string _searchName;
+
+        public ICollectionView ListCollectionView
+        {
+            get => _listCollectionView;
+            set
+            {
+                _listCollectionView = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string SearchName
+        {
+            get => _searchName;
+            set
+            {
+                _searchName = value;OnPropertyChanged();
+                if (_listCollectionView != null)
+                {
+                    _listCollectionView.Refresh();
+                }
+            }
+        }
 
         public Monster SelectMonster
         {
@@ -43,6 +68,7 @@ namespace MonsterModify
             get => _monsterList;
             set
             {
+                
                 _monsterList = value;
                 OnPropertyChanged();
             }
@@ -115,11 +141,13 @@ namespace MonsterModify
         public IAsyncRelayCommand LoadAllMonstersCommand { get; set; }
         public IAsyncRelayCommand SaveMonsterAttributeCommand { get; set; }
 
+
         public MainViewModel()
         {
             SaveAllMonsterAttributeCommand = new AsyncRelayCommand(SaveAllMonsterAttributeAsync);
             LoadAllMonstersCommand = new AsyncRelayCommand(LoadAllMonstersAsync);
             SaveMonsterAttributeCommand = new AsyncRelayCommand(SaveMonsterAttribute);
+
         }
 
         private async Task SaveAllMonsterAttributeAsync()
@@ -143,6 +171,8 @@ namespace MonsterModify
         {
             await _monsterUtil.LoadMonsters();
             MonsterList = new ObservableCollection<Monster>(_monsterUtil.Monsters);
+            ListCollectionView = CollectionViewSource.GetDefaultView(MonsterList);
+            ListCollectionView.Filter = FilterTask;
         }
 
         private void UpdateMonsterAttribute()
@@ -156,6 +186,19 @@ namespace MonsterModify
         private async Task SaveMonsterAttribute()
         {
             await _monsterUtil.SaveMonster(SelectMonster);
+        }
+
+        public bool FilterTask(object value)
+        {
+            if (value is Monster entry)
+            {
+                if (!string.IsNullOrEmpty(SearchName))
+                {
+                    return entry.MonsterAttributes["name"].Value.Contains(SearchName);
+                }
+                return true;
+            }
+            return false;
         }
     }
 }

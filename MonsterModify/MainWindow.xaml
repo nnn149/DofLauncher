@@ -9,6 +9,7 @@
     <Window.DataContext>
         <local:MainViewModel />
     </Window.DataContext>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0" />
@@ -75,7 +76,12 @@
 
         <DockPanel Grid.Column="1" Grid.Row="1">
             <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top">所有怪列表物</TextBlock>
-            <Button Command="{Binding LoadAllMonstersCommand}" DockPanel.Dock="Top">加载所有怪物</Button>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">按名称过滤：</TextBlock>
+                <TextBox MinWidth="50" Text="{Binding SearchName ,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Button Command="{Binding LoadAllMonstersCommand}" >加载所有怪物</Button>
+            </StackPanel>
+
             <DataGrid Name="DgMain" DockPanel.Dock="Bottom" IsReadOnly="True" AutoGenerateColumns="False"
                       HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"
                       SelectionMode="Single"
