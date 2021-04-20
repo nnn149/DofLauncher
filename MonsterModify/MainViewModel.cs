@@ -113,11 +113,13 @@ namespace MonsterModify
 
         public IAsyncRelayCommand SaveAllMonsterAttributeCommand { get; set; }
         public IAsyncRelayCommand LoadAllMonstersCommand { get; set; }
+        public IAsyncRelayCommand SaveMonsterAttributeCommand { get; set; }
 
         public MainViewModel()
         {
             SaveAllMonsterAttributeCommand = new AsyncRelayCommand(SaveAllMonsterAttributeAsync);
             LoadAllMonstersCommand = new AsyncRelayCommand(LoadAllMonstersAsync);
+            SaveMonsterAttributeCommand = new AsyncRelayCommand(SaveMonsterAttribute);
         }
 
         private async Task SaveAllMonsterAttributeAsync()
@@ -150,6 +152,10 @@ namespace MonsterModify
             KingMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 2];
             HellMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 3];
             UnknownMode = _monsterUtil.MainData[AllMonsterAttributeListIndex, 4];
+        }
+        private async Task SaveMonsterAttribute()
+        {
+            await _monsterUtil.SaveMonster(SelectMonster);
         }
     }
 }

@@ -136,16 +136,11 @@ namespace MonsterModify
                     attribute.Value.Value = matchCollection[0].Groups[attribute.Value.ReplaceIndex].Value;
                 }
             else
-            {
                 return null;
-            }
 
             if (monster.MonsterAttributes.ContainsKey("name"))
             {
-                if (string.IsNullOrEmpty(monster.MonsterAttributes["name"].Value))
-                {
-                    return null;
-                }
+                if (string.IsNullOrEmpty(monster.MonsterAttributes["name"].Value)) return null;
             }
             else
             {
@@ -154,6 +149,42 @@ namespace MonsterModify
 
 
             return monster;
+        }
+
+        public async Task<bool> SaveMonster(Monster monster)
+        {
+            var data = await PvfUtil.GetFileAsync(monster.Path);
+            if (!string.IsNullOrEmpty(data))
+            {
+                foreach (var attribute in monster.MonsterAttributes)
+                {
+                    if (new Regex(attribute.Value.Pattern).Matches(data).Count < 1)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        data = Regex.Replace(data, attribute.Value.Pattern, m =>
+                        {
+                            var str = "";
+                            for (var i = 1; i <= m.Groups.Count; i++)
+                                if (i != attribute.Value.ReplaceIndex)
+                                    str += m.Groups[i].Value;
+                                else
+                                    str += attribute.Value.Value;
+
+                            return str;
+                        });
+                    }
+                }
+
+                if (await PvfUtil.SaveFileAsync(monster.Path, data))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /* MainData

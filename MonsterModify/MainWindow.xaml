@@ -24,6 +24,10 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
             <TextBlock HorizontalAlignment="Center">全局怪物属性修改</TextBlock>
+            <Button Command="{Binding SaveAllMonsterAttributeCommand}" Grid.Row="5" Grid.ColumnSpan="2"
+                    Grid.Column="0">
+                保存全局属性
+            </Button>
             <ListBox SelectedIndex="{Binding AllMonsterAttributeListIndex}">
                 <ListBoxItem>好战</ListBoxItem>
                 <ListBoxItem>视野</ListBoxItem>
@@ -64,16 +68,13 @@
                     <TextBox Text="{Binding HellMode}" Grid.Row="3" Grid.Column="1" />
                     <TextBlock Grid.Row="4" Grid.Column="0">未知级:</TextBlock>
                     <TextBox Text="{Binding UnknownMode}" Grid.Row="4" Grid.Column="1" />
-                    <Button Command="{Binding SaveAllMonsterAttributeCommand}" Grid.Row="5" Grid.ColumnSpan="2"
-                            Grid.Column="0">
-                        保存全局属性
-                    </Button>
+        
                 </Grid>
             </StackPanel>
         </StackPanel>
 
         <DockPanel Grid.Column="1" Grid.Row="1">
-            <TextBox HorizontalAlignment="Center" DockPanel.Dock="Top">所有怪物</TextBox>
+            <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top">所有怪列表物</TextBlock>
             <Button Command="{Binding LoadAllMonstersCommand}" DockPanel.Dock="Top">加载所有怪物</Button>
             <DataGrid Name="DgMain" DockPanel.Dock="Bottom" IsReadOnly="True" AutoGenerateColumns="False"
                       HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"
@@ -97,18 +98,21 @@
         </DockPanel>
 
         <DockPanel Grid.Row="1" Grid.Column="2">
-            <TextBlock Text="选中怪物属性修改" DockPanel.Dock="Top" />
-            <ListBox ItemsSource="{Binding SelectMonster.MonsterAttributes}">
+            <TextBlock HorizontalAlignment="Center" Text="选中怪物属性修改" DockPanel.Dock="Top" />
+            <Button DockPanel.Dock="Top" Command="{Binding SaveMonsterAttributeCommand}">保存当前属性</Button>
+            <ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding SelectMonster.MonsterAttributes}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel Height="30">
                             <TextBlock VerticalAlignment="Center" DockPanel.Dock="Left" Text="{Binding Value.Name }" />
-                            <TextBox VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Value.Value}" />
+                            <TextBox VerticalAlignment="Center" DockPanel.Dock="Left" Text="{Binding Value.Value}" />
+                            <GridSplitter Width="3"></GridSplitter>
+                            <TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Key }" />
                         </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <UniformGrid DockPanel.Dock="Bottom" />
+          
         </DockPanel>
 
     </Grid>
